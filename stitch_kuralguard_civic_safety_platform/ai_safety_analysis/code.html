@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;min-height:100vh;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed": "#001f27", "on-surface-variant": "#44474e", "tertiary-fixed-dim": "#ffb95f", "tertiary": "#140800", "surface-bright": "#f8f9ff", "on-primary-fixed": "#061b3a", "on-tertiary-fixed": "#2a1700", "on-secondary": "#ffffff", "primary-container": "#0d2140", "on-secondary-fixed-variant": "#004e5f", "surface": "#f8f9ff", "error-container": "#ffdad6", "surface-tint": "#4d5f81", "primary": "#000a20", "secondary-fixed-dim": "#4cd6fb", "on-error-container": "#93000a", "tertiary-fixed": "#ffddb8", "surface-container-high": "#dce9ff", "surface-container-low": "#eff4ff", "on-surface": "#0b1c30", "primary-fixed": "#d7e2ff", "secondary": "#00677d", "on-tertiary-fixed-variant": "#653e00", "error": "#ba1a1a", "on-tertiary": "#ffffff", "on-primary-container": "#7789ae", "inverse-primary": "#b5c7ee", "inverse-on-surface": "#eaf1ff", "on-primary-fixed-variant": "#354768", "surface-dim": "#cbdbf5", "on-tertiary-container": "#bf7a00", "on-secondary-container": "#005c70", "on-primary": "#ffffff", "outline": "#75777f", "secondary-fixed": "#b3ebff", "surface-container-lowest": "#ffffff", "tertiary-container": "#331d00", "background": "#f8f9ff", "on-error": "#ffffff", "surface-container-highest": "#d3e4fe", "inverse-surface": "#213145", "primary-fixed-dim": "#b5c7ee", "outline-variant": "#c5c6cf", "secondary-container": "#50d9fe", "surface-container": "#e5eeff", "surface-variant": "#d3e4fe", "on-background": "#0b1c30" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-md": "1rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "gutter": "1.5rem", "margin": "2rem", "space-xl": "2.5rem", "space-sm": "0.5rem", "gutter-mobile": "1rem", "margin-mobile": "1rem" }, "fontFamily": { "label-lg": ["Plus Jakarta Sans"], "display": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "body-md": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Inter"] }, "fontSize": { "label-lg": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }], "display": ["3.5rem", { "lineHeight": "4.25rem", "letterSpacing": "-0.025em", "fontWeight": "800" }], "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.05em", "fontWeight": "700" }], "label-md": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.04em", "fontWeight": "700" }], "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "600" }], "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }], "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "700" }], "title-md": ["1.125rem", { "lineHeight": "1.5rem", "fontWeight": "600" }], "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }], "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "700" }], "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter-mobile flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Go back" class="min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[22px]">arrow_back</span></button><img alt="kuralguard-logo-mark-a.png" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/ALJJyrB7XDOC7Fcup3E_L5m1RgXL-61HKv5lzKbDzjKxVoXtkIMMJj00435yhKSSQZpCZqEsSPQXXu_NSqoeSVNjfLC251wjDDSIFAeodiU3UDlRVnxKkhE5V8BQ7OCU_j0n9G49knJTpRDnRfmjmYDWZ9UXGQrnos-bzZFJw-HefZIS3wy7k6FeaAkLNR5t5FCtePbQZdnw1OPFumlUHhClWzSVBc_hwIvZaUom4Z9N_Mvynfn6RYdAR7uj66g3"/><div class="flex flex-col min-w-0 ml-1"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-extrabold truncate leading-tight">KuralGuard</span><span class="font-label-sm text-label-sm text-on-surface-variant truncate">Incident Details</span></div></div><div class="flex items-center gap-space-xs flex-shrink-0"><button aria-label="Switch Language" class="min-h-[44px] px-2 rounded-full bg-surface-container flex items-center justify-center text-on-surface font-label-md text-label-md transition-colors hover:bg-surface-container-high"><span class="text-primary font-bold">EN</span><span class="mx-0.5 text-outline">|</span><span class="text-on-surface-variant">தமிழ்</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-surface"><div class="flex flex-col w-full pb-10">
+<!-- Interactive Top Banner & Disclaimer -->
+<div class="px-gutter-mobile pt-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary-container" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-label-sm tracking-wide">Demo AI-Assisted Analysis</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+<span>Model v2.4 Live</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-xl flex items-start gap-space-xs shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-outline flex-shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+        This is an AI-assisted demo estimate and should not replace verified emergency services or professional civic judgment.
+      </p>
+</div>
+</div>
+<!-- Main Intelligence Core Card -->
+<div class="px-gutter-mobile mt-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-md flex flex-col gap-space-md relative overflow-hidden">
+<!-- Glow Accent Background Blob -->
+<div class="absolute -top-12 -right-12 w-36 h-36 rounded-full bg-secondary-container/20 blur-2xl pointer-events-none"></div>
+<!-- Category & High Risk Header -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">traffic</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Detected Hazard</span>
+<span class="font-title-md text-title-md text-on-surface font-bold truncate">Road Safety</span>
+</div>
+</div>
+<div class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-error-container text-on-error-container font-label-md text-label-md flex-shrink-0 shadow-sm animate-pulse">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span>HIGH RISK</span>
+</div>
+</div>
+<!-- Confidence Gauge & Verification -->
+<div class="bg-surface-container-low p-space-sm rounded-xl flex flex-col gap-space-xs">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+            Confidence Estimate: 94%
+          </span>
+<span class="text-on-surface-variant">Evidence Verified</span>
+</div>
+<!-- Progress Bar Meter -->
+<div class="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
+<div class="h-full rounded-full bg-secondary-container transition-all duration-700" style="width: 94%"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+<span>Cross-verified via satellite &amp; civic feed</span>
+<span class="font-medium text-secondary">Tamil: ஆபத்து நிலை: அதிகம்</span>
+</div>
+</div>
+<!-- Evidence Photo Thumbnail with Map Spatial Context -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="relative rounded-xl overflow-hidden h-28 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Clear daytime photograph of a busy suburban school road junction with fast vehicles, students waiting to cross, missing pedestrian markings, realistic documentary civic journalism style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIAiWY5fuzGUqkM4zWDnGcFHcQp7gM429CD66wWg7gGdF1vM6vYd2CLlEQTuBQk2uqED54Km05A_Q9EU_36Q9TCiQ0h0gWoGFEBLgZSdqpbTjCYJQVPwzawZ8ChVk5vehhuZNnaJd7FIxRFNs8paUqK2HPAIXB4rf2Vk4Y7Yc0hTNOU_7LhNSghm9BAVHPyHG3355NqlUVoxTz1dJUbhtFaLEObSkEAN6aVIUESk6Q"/>
+<div class="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary font-label-sm text-label-sm">
+            Road Commute Lens
+          </div>
+</div>
+<div class="relative rounded-xl overflow-hidden h-28 bg-cover bg-center" data-location="Madurai Kamaraj University Road, Tamil Nadu" style="">
+<div class="absolute inset-0 bg-primary/10"></div>
+<div class="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">pin_drop</span>
+            Geo-tagged
+          </div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: What We Detected -->
+<div class="px-gutter-mobile mt-space-lg flex flex-col gap-space-xs">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[20px] text-secondary">radar</span>
+<h2 class="font-headline-sm text-headline-sm font-bold">What We Detected</h2>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm text-on-surface font-body-md text-body-md leading-relaxed">
+      Uncontrolled pedestrian crossing point along designated school commute zone during peak morning and afternoon intervals 
+      <span class="font-semibold text-primary block mt-1 bg-surface-container-low px-2.5 py-1 rounded-lg">
+        ⏱ 7:45 AM – 8:30 AM &amp; 3:15 PM – 4:00 PM
+      </span>
+</div>
+</div>
+<!-- Section: Why This Risk Level (4 Factor Micro-Cards) -->
+<div class="px-gutter-mobile mt-space-lg flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[20px] text-secondary">analytics</span>
+<h2 class="font-headline-sm text-headline-sm font-bold">Why This Risk Level</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 Contributing Factors</span>
+</div>
+<div class="grid grid-cols-1 gap-space-xs">
+<!-- Factor 1 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">school</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">School-zone location with high footfall</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Direct path connecting transit stop with high secondary school campus.</span>
+</div>
+</div>
+<!-- Factor 2 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-error-container flex items-center justify-center text-on-error-container flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">speed</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">Fast-moving vehicular traffic (35–50 km/h)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Traffic exceeds school zone safety limits by up to 2.5x without dampeners.</span>
+</div>
+</div>
+<!-- Factor 3 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">do_not_disturb_on</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">No visible zebra crossing or speed humps</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Complete absence of high-contrast roadway pavement indicators or reflectors.</span>
+</div>
+</div>
+<!-- Factor 4 -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex items-start gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">light_off</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">Poor lighting during dawn &amp; rainy weather</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Overhanging tree canopy diminishes visibility during monsoon and early hours.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Affected Group Bento Box -->
+<div class="px-gutter-mobile mt-space-lg flex flex-col gap-space-xs">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[20px] text-secondary">groups</span>
+<h2 class="font-headline-sm text-headline-sm font-bold">Affected Community</h2>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between gap-space-md">
+<div class="flex flex-col min-w-0">
+<span class="font-body-md text-body-md text-on-surface font-medium leading-normal">
+          Students, children, elderly escorts, and daily pedestrians.
+        </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          Surrounding residential wards 12 &amp; 14 rely on this transit corridor.
+        </span>
+</div>
+<div class="flex flex-col items-center justify-center px-3 py-2 rounded-xl bg-surface-container-low flex-shrink-0 text-center">
+<span class="font-headline-md text-headline-md text-primary font-extrabold leading-none">~450</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">Daily Crossings</span>
+</div>
+</div>
+</div>
+<!-- Section: What To Do Now (Immediate Guidance / அடுத்த செயல்) -->
+<div class="px-gutter-mobile mt-space-lg">
+<div class="bg-primary text-on-primary rounded-xl p-space-md shadow-lg flex flex-col gap-space-sm relative overflow-hidden">
+<!-- Decorative Shield Watermark -->
+<span class="material-symbols-outlined absolute -bottom-6 -right-6 text-[110px] text-on-primary/10 select-none pointer-events-none">
+        shield_with_heart
+      </span>
+<div class="flex items-center justify-between">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">security</span>
+          Immediate Action
+        </div>
+<span class="text-on-primary-container font-label-sm text-label-sm">அடுத்த பாதுகாப்பான செயல்</span>
+</div>
+<h3 class="font-title-md text-title-md font-bold leading-tight">
+        Safe Crossing Protocol Active
+      </h3>
+<div class="bg-primary-container p-space-sm rounded-lg flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-secondary-container text-[22px] flex-shrink-0">navigation</span>
+<p class="font-body-md text-body-md text-surface-container-high leading-snug">
+<strong class="text-on-primary">Avoid crossing alone.</strong> Use the traffic-warden assisted junction <span class="text-secondary-fixed-dim underline underline-offset-2">120m north</span> near Main Gate. Cross only in monitored cohorts.
+        </p>
+</div>
+<div class="flex items-center justify-between text-on-primary-container font-label-sm text-label-sm pt-1">
+<span>Ward Marshal On-Duty: Thiru. R. Murugan</span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">call</span> Intercom #04
+        </span>
+</div>
+</div>
+</div>
+<!-- Section: Community Long-Term Improvement (Intervention Stepper) -->
+<div class="px-gutter-mobile mt-space-lg flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-on-surface">
+<span class="material-symbols-outlined text-[20px] text-secondary">handshake</span>
+<h2 class="font-headline-sm text-headline-sm font-bold">Recommended Community Action</h2>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Collaborative steps scheduled for submission to the Ward Councillor and Road Safety Cell:
+      </p>
+<div class="flex flex-col gap-space-xs">
+<!-- Checklist Step 1 -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-5 h-5 rounded-md bg-primary text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">Install high-visibility thermal zebra crossing</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Durable reflective paint with anti-skid glass bead beads.</span>
+</div>
+</label>
+<!-- Checklist Step 2 -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-5 h-5 rounded-md bg-primary text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">Deploy 20 km/h school-zone speed breakers</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">IRC compliant rubberized modular humps with warning signs.</span>
+</div>
+</label>
+<!-- Checklist Step 3 -->
+<label class="flex items-start gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="w-5 h-5 rounded-md bg-primary text-on-primary flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[15px]">check</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold">Request traffic police presence during school bell hours</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Regular morning and evening traffic volunteer rotation.</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Navigation & Primary Action Buttons -->
+<div class="px-gutter-mobile mt-space-xl flex flex-col gap-space-sm">
+<button class="w-full py-3.5 px-space-md rounded-xl bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-space-xs shadow-lg active:scale-[0.99] transition-transform" id="generateBriefBtn">
+<span>Generate Shareable Brief</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<button class="w-full py-2.5 text-center font-label-md text-label-md text-secondary hover:text-primary transition-colors flex items-center justify-center gap-1" onclick="history.back()">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span>Edit Observation Details</span>
+</button>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for brief generation
+  document.getElementById('generateBriefBtn')?.addEventListener('click', function() {
+    const btn = this;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">progress_activity</span><span>Compiling Civic Dossier...</span>`;
+    btn.classList.add('opacity-90');
+    setTimeout(() => {
+      btn.innerHTML = `<span class="material-symbols-outlined text-[20px] text-secondary-container">check_circle</span><span>Brief Ready & Downloaded</span>`;
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('opacity-90');
+      }, 2500);
+    }, 1200);
+  });
+</script></main></body></html>
