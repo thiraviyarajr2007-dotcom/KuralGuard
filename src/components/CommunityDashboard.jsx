@@ -29,131 +29,284 @@ export function CommunityDashboard({
     total: reports.length,
     highRisk: reports.filter(r => r.riskLevel === 'High' || r.urgency === 'High').length,
     resolved: reports.filter(r => r.status === 'Resolved').length,
+    topCategory: reports.length > 0 ? reports[0].category : 'N/A',
   }), [reports]);
 
   return (
-    <div className="flex flex-col gap-space-lg pt-16 px-gutter-mobile pb-28">
+    <div className="flex flex-col gap-space-md pt-16 px-gutter-mobile pb-28">
       
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold tracking-tight">
-            Community Safety Priority Dashboard
-          </h1>
-          <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-            Track civic action status across all reported hazards
-          </p>
+      {/* Header Banner Section */}
+      <div className="flex flex-col space-y-space-xs pt-space-sm">
+        <div className="flex items-center justify-between">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/30 text-on-secondary-fixed text-label-sm font-label-sm">
+            <span className="inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+            Ward 14 • SafeZones Watch
+          </div>
+          <span className="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-1">
+            <span className="material-symbols-outlined text-[16px]">sync</span>
+            Live Feed
+          </span>
         </div>
-        <button
-          onClick={onResetDemo}
-          className="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors"
-        >
-          <span className="material-symbols-outlined text-[18px]">refresh</span>
-          <span>Reset Demo</span>
-        </button>
+        <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight font-extrabold">
+          Community Safety Priority
+        </h1>
+        <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Live community reports and civic action queue for Ward 14 & school zones.
+        </p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-3 gap-2">
-        <div className="bg-surface-container-lowest p-3 rounded-xl shadow-xs flex flex-col">
-          <span className="font-headline-sm text-headline-sm font-extrabold text-primary">{stats.total}</span>
-          <span className="font-label-sm text-label-sm text-on-surface-variant">Total Reports</span>
+      {/* Metric Summary Bento Grid */}
+      <div className="grid grid-cols-2 gap-space-sm">
+        {/* Card 1: Total Reports */}
+        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-label-md text-label-md text-on-surface-variant">Total Reports</span>
+            <div className="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-primary">
+              <span className="material-symbols-outlined text-[16px]">folder_open</span>
+            </div>
+          </div>
+          <div>
+            <div className="font-headline-md text-headline-md text-primary font-bold">{stats.total}</div>
+            <div className="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary font-semibold">
+              <span className="material-symbols-outlined text-[14px]">trending_up</span>
+              +{Math.floor(stats.total * 0.1)} this week
+            </div>
+          </div>
         </div>
-        <div className="bg-error-container/40 p-3 rounded-xl shadow-xs flex flex-col">
-          <span className="font-headline-sm text-headline-sm font-extrabold text-error">{stats.highRisk}</span>
-          <span className="font-label-sm text-label-sm text-on-error-container font-semibold">High Priority</span>
+
+        {/* Card 2: High Risk */}
+        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-label-md text-label-md text-on-surface-variant">High-Risk</span>
+            <div className="w-7 h-7 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+              <span className="material-symbols-outlined text-[16px]">crisis_alert</span>
+            </div>
+          </div>
+          <div>
+            <div className="font-headline-md text-headline-md text-error font-bold">{stats.highRisk} Alerts</div>
+            <span className="inline-block px-2 py-0.5 rounded-full bg-error-container/60 text-on-error-container text-label-sm font-label-sm font-bold">
+              Urgent Action
+            </span>
+          </div>
         </div>
-        <div className="bg-secondary-fixed/30 p-3 rounded-xl shadow-xs flex flex-col">
-          <span className="font-headline-sm text-headline-sm font-extrabold text-secondary">{stats.resolved}</span>
-          <span className="font-label-sm text-label-sm text-on-secondary-fixed-variant font-semibold">Resolved</span>
+
+        {/* Card 3: Resolved */}
+        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-label-md text-label-md text-on-surface-variant">Resolved</span>
+            <div className="w-7 h-7 rounded-full bg-secondary-container/40 text-on-secondary-fixed flex items-center justify-center">
+              <span className="material-symbols-outlined text-[16px]">check_circle</span>
+            </div>
+          </div>
+          <div>
+            <div className="font-headline-md text-headline-md text-secondary font-bold">{stats.resolved} Done</div>
+            <span className="inline-block px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-label-sm font-label-sm font-bold">
+              {Math.round((stats.resolved / stats.total) * 100)}% cleared
+            </span>
+          </div>
+        </div>
+
+        {/* Card 4: Most Common */}
+        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+          <div className="flex items-center justify-between">
+            <span className="font-label-md text-label-md text-on-surface-variant">Top Area</span>
+            <div className="w-7 h-7 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
+              <span className="material-symbols-outlined text-[16px]">traffic</span>
+            </div>
+          </div>
+          <div>
+            <div className="font-headline-sm text-headline-sm text-primary font-bold truncate">{stats.topCategory}</div>
+            <div className="font-label-sm text-label-sm text-on-tertiary-container font-semibold">
+              {Math.round((reports.filter(r => r.category === stats.topCategory).length / stats.total) * 100)}% of concerns
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Search & Filter */}
-      <div className="flex flex-col sm:flex-row gap-2">
-        <div className="flex-1 flex items-center gap-2 bg-surface-container-lowest rounded-lg px-3 py-2">
-          <span className="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+      {/* Search and Sort Controls */}
+      <div className="space-y-space-xs">
+        <div className="relative w-full">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+            <span className="material-symbols-outlined text-[20px]">search</span>
+          </div>
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search reports..."
-            className="flex-1 bg-transparent text-on-surface font-body-md text-body-md focus:outline-none placeholder:text-outline"
+            placeholder="Search by keyword, location, or school name..."
+            className="w-full bg-surface-container-lowest text-on-surface placeholder:text-outline text-body-sm font-body-sm rounded-xl py-3 pl-10 pr-4 shadow-sm focus:outline-none focus:bg-surface-container-low transition-all"
           />
         </div>
-        <div className="flex gap-1">
+
+        {/* Category Horizontal Scroll Chips */}
+        <div className="flex items-center gap-space-xs overflow-x-auto py-1.5 no-scrollbar -mx-gutter-mobile px-gutter-mobile">
           <button
             onClick={() => setFilter('all')}
-            className={`px-3 py-2 rounded-lg font-label-sm text-label-sm transition-colors ${
-              filter === 'all' ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
+            className={`flex-shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md shadow-xs ${
+              filter === 'all' ? 'bg-surface-container-high text-on-surface' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container'
             }`}
           >
             All
           </button>
-          <button
-            onClick={() => setFilter('pending')}
-            className={`px-3 py-2 rounded-lg font-label-sm text-label-sm transition-colors ${
-              filter === 'pending' ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
-            }`}
-          >
-            Pending
-          </button>
-          <button
-            onClick={() => setFilter('resolved')}
-            className={`px-3 py-2 rounded-lg font-label-sm text-label-sm transition-colors ${
-              filter === 'resolved' ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
-            }`}
-          >
-            Resolved
-          </button>
+          {['Road Safety', 'Public Lighting', 'Flooding', "Women's Safety", 'Sanitation'].map(cat => (
+            <button
+              key={cat}
+              onClick={() => setFilter(cat.toLowerCase())}
+              className={`flex-shrink-0 px-3.5 py-1.5 rounded-full font-label-md text-label-md shadow-xs ${
+                filter === cat.toLowerCase() ? 'bg-primary text-on-primary shadow-sm flex items-center gap-1.5' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container'
+              }`}
+            >
+              {cat}
+              {filter === cat.toLowerCase() && <span className="w-2 h-2 rounded-full bg-secondary-container"></span>}
+            </button>
+          ))}
+        </div>
+
+        {/* Severity & Sorting Filter Row */}
+        <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center gap-1">
+            <button className="px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
+              High Risk
+            </button>
+            <button className="px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+              Med
+            </button>
+            <button className="px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+              Low
+            </button>
+          </div>
+          <div className="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+            <span className="material-symbols-outlined text-[16px] text-secondary">swap_vert</span>
+            <span className="truncate">Urgency & Proximity</span>
+          </div>
         </div>
       </div>
 
-      {/* Reports List */}
-      <div className="flex flex-col gap-2">
+      {/* Priority Queue Incident Cards Section */}
+      <div className="space-y-space-md pt-space-xs">
+        <div className="flex items-center justify-between">
+          <span className="font-title-md text-title-md text-primary font-bold">Active Priority Incidents</span>
+          <span className="font-label-sm text-label-sm text-secondary font-semibold">{filteredReports.length} Showing</span>
+        </div>
+
         {filteredReports.length === 0 ? (
           <div className="bg-surface-container-lowest rounded-xl p-8 text-center">
             <span className="material-symbols-outlined text-[48px] text-on-surface-variant mb-2">inbox</span>
             <p className="font-body-md text-body-md text-on-surface-variant">No reports found</p>
           </div>
         ) : (
-          filteredReports.map((report) => (
+          filteredReports.map((report, idx) => (
             <div
               key={report.id}
-              className="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex flex-col gap-3 cursor-pointer hover:bg-surface-container transition-colors"
+              className="relative bg-surface-container-lowest rounded-2xl p-space-md shadow-sm overflow-hidden cursor-pointer hover:bg-surface-container transition-colors"
               onClick={() => onViewReportDetails(report)}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2 py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm">
+              {/* Left indicator bar */}
+              <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${
+                report.riskLevel === 'High' ? 'bg-error' : report.riskLevel === 'Medium' ? 'bg-amber-500' : 'bg-secondary'
+              }`}></div>
+              <div className="flex flex-col space-y-space-sm pl-1">
+                
+                {/* Badge row */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {report.riskLevel === 'High' && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-error animate-ping"></span>
+                        HIGH RISK
+                      </span>
+                    )}
+                    <span className="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold">
                       {report.category}
                     </span>
-                    {report.riskLevel === 'High' && (
-                      <span className="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm">
-                        High Risk
+                    {report.status === 'Resolved' && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+                        RESOLVED
                       </span>
                     )}
                   </div>
-                  <h3 className="font-title-md text-title-md text-primary font-bold">{report.title}</h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">{report.description}</p>
+                  <span className="font-label-sm text-label-sm text-outline">{idx + 1}m ago</span>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="font-label-sm text-label-sm text-on-surface-variant">{report.status}</span>
+
+                {/* Title */}
+                <h2 className="font-title-md text-title-md text-primary font-bold leading-snug">
+                  {report.title}
+                </h2>
+
+                {/* Info meta pills */}
+                <div className="bg-surface-container-low rounded-xl p-space-sm space-y-1.5">
+                  <div className="flex items-start gap-2">
+                    <span className="material-symbols-outlined text-[18px] text-primary flex-shrink-0 mt-0.5">location_on</span>
+                    <div className="text-body-sm font-body-sm text-on-surface">
+                      <span className="font-semibold text-primary">Location:</span> {report.location}
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="material-symbols-outlined text-[18px] text-secondary flex-shrink-0 mt-0.5">notification_important</span>
+                    <div className="text-body-sm font-body-sm text-on-surface">
+                      <span className="font-semibold text-primary">Status:</span> {report.status}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stepper / Status track */}
+                <div className="flex items-center gap-2 pt-1">
+                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full ${
+                    report.status === 'Draft' ? 'bg-surface-container text-on-surface-variant' : 'bg-secondary text-on-secondary'
+                  }`}>
+                    <span className="material-symbols-outlined text-[12px]">{report.status === 'Draft' ? 'radio_button_unchecked' : 'check'}</span>
+                  </span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">Draft</span>
+                  <div className="h-0.5 flex-1 bg-surface-container"></div>
+                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full ${
+                    report.status === 'Submitted' ? 'bg-surface-container text-on-surface-variant' : 'bg-secondary text-on-secondary'
+                  }`}>
+                    <span className="material-symbols-outlined text-[12px]">{report.status === 'Submitted' ? 'radio_button_unchecked' : 'check'}</span>
+                  </span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">Submitted</span>
+                  <div className="h-0.5 flex-1 bg-surface-container"></div>
+                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full ${
+                    report.status === 'Verified' ? 'bg-surface-container text-on-surface-variant' : 'bg-secondary text-on-secondary'
+                  }`}>
+                    <span className="material-symbols-outlined text-[12px]">{report.status === 'Verified' ? 'radio_button_unchecked' : 'check'}</span>
+                  </span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">Verified</span>
+                  <div className="h-0.5 flex-1 bg-surface-container"></div>
+                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full ${
+                    report.status === 'Resolved' ? 'bg-surface-container text-on-surface-variant' : 'bg-secondary text-on-secondary'
+                  }`}>
+                    <span className="material-symbols-outlined text-[12px]">{report.status === 'Resolved' ? 'radio_button_unchecked' : 'check'}</span>
+                  </span>
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">Resolved</span>
+                </div>
+
+                {/* Action buttons */}
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewReportDetails(report);
+                    }}
+                    className="flex-1 py-2 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors"
+                  >
+                    View Details
+                  </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onToggleResolve(report.id, report.status === 'Resolved' ? 'Submitted' : 'Resolved');
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors"
+                    className={`flex-1 py-2 rounded-lg font-label-md text-label-md transition-colors ${
+                      report.status === 'Resolved'
+                        ? 'bg-surface-container text-on-surface hover:bg-surface-container-high'
+                        : 'bg-secondary text-on-secondary hover:opacity-90'
+                    }`}
                   >
-                    {report.status === 'Resolved' ? 'Reopen' : 'Resolve'}
+                    {report.status === 'Resolved' ? 'Reopen' : 'Mark Resolved'}
                   </button>
                 </div>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-on-surface-variant">
-                <span className="material-symbols-outlined text-[16px]">location_on</span>
-                <span>{report.location}</span>
+
               </div>
             </div>
           ))
@@ -167,6 +320,15 @@ export function CommunityDashboard({
       >
         <span className="material-symbols-outlined text-[20px]">add_circle</span>
         <span>Report New Issue</span>
+      </button>
+
+      {/* Reset Demo Button */}
+      <button
+        onClick={onResetDemo}
+        className="w-full py-2.5 text-center font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center gap-1"
+      >
+        <span className="material-symbols-outlined text-[18px]">refresh</span>
+        <span>Reset Demo Data</span>
       </button>
 
       {/* Detail Modal */}
