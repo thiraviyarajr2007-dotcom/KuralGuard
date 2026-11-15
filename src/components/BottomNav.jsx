@@ -3,10 +3,10 @@ import { t } from '../lang';
 
 export function BottomNav({ activePage, setActivePage, lang = 'en' }) {
   const items = [
-    { id: 'landing', label: t(lang, 'nav.home'), icon: 'shield' },
-    { id: 'report', label: t(lang, 'nav.report'), icon: 'add_circle', isPrimary: true },
-    { id: 'dashboard', label: t(lang, 'nav.dashboard'), icon: 'checklist' },
-    { id: 'resources', label: t(lang, 'nav.resources'), icon: 'health_and_safety' },
+    { id: 'landing', label: t(lang, 'nav.home'), icon: 'shield', ariaLabel: 'Home' },
+    { id: 'report', label: t(lang, 'nav.report'), icon: 'add_circle', isPrimary: true, ariaLabel: 'Report an issue' },
+    { id: 'dashboard', label: t(lang, 'nav.dashboard'), icon: 'checklist', ariaLabel: 'Community Dashboard' },
+    { id: 'resources', label: t(lang, 'nav.resources'), icon: 'health_and_safety', ariaLabel: 'Safety Resources' },
   ];
 
   const handleNav = (id) => {

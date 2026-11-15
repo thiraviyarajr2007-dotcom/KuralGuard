@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="stitch_kuralguard_civic_safety_platform">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/stitch_kuralguard_civic_safety_platform.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

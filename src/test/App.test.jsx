@@ -161,4 +161,82 @@ describe('KuralGuard Application Integration Tests', () => {
 
     expect(screen.getByText(/Call 112 Toll-Free/i)).toBeInTheDocument();
   });
+
+  it('NotFoundPage handles invalid routes without crashing and allows returning home', () => {
+    window.location.hash = '#/invalid-route';
+    render(<App />);
+
+    expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
+    const homeBtn = screen.getAllByRole('button', { name: /home/i })[0];
+    fireEvent.click(homeBtn);
+    expect(screen.getByText(/Turn a local safety concern into the/i)).toBeInTheDocument();
+  });
+
+  it('Dashboard category filter and severity buttons filter records accurately without disappearing all cards', () => {
+    render(<App />);
+
+    const dashboardTab = screen.getAllByRole('button', { name: /community dashboard/i })[0];
+    fireEvent.click(dashboardTab);
+
+    // Click Road Safety category filter chip
+    const roadSafetyChips = screen.getAllByRole('button', { name: /^road safety$/i });
+    fireEvent.click(roadSafetyChips[0]);
+    expect(screen.getByText(/Dangerous school-road crossing/i)).toBeInTheDocument();
+    expect(screen.queryByText(/No reports match your filters/i)).not.toBeInTheDocument();
+
+    // Reset back to All
+    const allChip = screen.getByRole('button', { name: /^all$/i });
+    fireEvent.click(allChip);
+    expect(screen.getByText(/Broken streetlight near a school/i)).toBeInTheDocument();
+
+    // Click High Risk severity filter
+    const highRiskBtn = screen.getByRole('button', { name: /high risk/i });
+    fireEvent.click(highRiskBtn);
+    expect(screen.getByText(/Dangerous school-road crossing/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Broken streetlight/i)).not.toBeInTheDocument();
+  });
+
+  it('Report Issue features: GPS auto-detect, suggested tags, anonymous toggle, and language selector', () => {
+    render(<App />);
+
+    const reportBtn = screen.getAllByRole('button', { name: /report an issue/i })[0];
+    fireEvent.click(reportBtn);
+
+    // GPS Auto-detect
+    const gpsBtn = screen.getByRole('button', { name: /auto detect location via gps/i });
+    fireEvent.click(gpsBtn);
+    const locationInput = screen.getByPlaceholderText(/search cross-streets/i);
+    expect(locationInput.value).toContain('Gandhi Road');
+
+    // Suggested Tag Append
+    const missingSignageBtn = screen.getByRole('button', { name: /\+ Missing Signage/i });
+    fireEvent.click(missingSignageBtn);
+    const descriptionInput = screen.getByPlaceholderText(/describe what occurred/i);
+    expect(descriptionInput.value).toContain('Missing Signage');
+
+    // Anonymous toggle
+    const anonToggle = screen.getByRole('switch', { name: /toggle anonymous reporting/i });
+    expect(anonToggle).toHaveAttribute('aria-checked', 'true');
+    fireEvent.click(anonToggle);
+    expect(anonToggle).toHaveAttribute('aria-checked', 'false');
+
+    // Preferred language selector
+    const tamilBriefBtn = screen.getByRole('button', { name: /^தமிழ்$/i });
+    fireEvent.click(tamilBriefBtn);
+    expect(tamilBriefBtn).toHaveClass('bg-primary');
+  });
+
+  it('Navbar language button toggles interface language smoothly', () => {
+    render(<App />);
+
+    const langBtn = screen.getByRole('button', { name: /switch language/i });
+    fireEvent.click(langBtn);
+
+    // In Tamil, nav shows 'முகப்பு' for Home
+    expect(screen.getAllByText(/முகப்பு/i).length).toBeGreaterThan(0);
+
+    // Switch back to EN
+    fireEvent.click(langBtn);
+    expect(screen.getAllByText(/Home/i).length).toBeGreaterThan(0);
+  });
 });

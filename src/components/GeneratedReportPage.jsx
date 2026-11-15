@@ -154,6 +154,50 @@ No report was submitted to any authority.
   return (
     <div className="flex flex-col gap-space-lg pt-16 px-gutter-mobile pb-28">
       
+      {/* Progress Stepper Header (Describe → Analyze → Act) */}
+      <div className="bg-surface-container-lowest shadow-sm rounded-xl p-3">
+        <div className="flex items-center justify-between gap-space-xs mb-2">
+          {/* Step 1 */}
+          <div className="flex items-center gap-1.5 text-secondary">
+            <div className="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-label-sm text-label-sm font-bold shadow-sm">
+              ✓
+            </div>
+            <div className="flex flex-col">
+              <span className="font-label-md text-label-md text-primary font-bold">Describe</span>
+              <span className="font-label-sm text-[10px] text-on-surface-variant leading-none">விவரம்</span>
+            </div>
+          </div>
+          <span className="material-symbols-outlined text-[16px] text-outline-variant">chevron_right</span>
+
+          {/* Step 2 */}
+          <div className="flex items-center gap-1.5 text-secondary">
+            <div className="w-6 h-6 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-label-sm text-label-sm font-bold shadow-sm">
+              ✓
+            </div>
+            <div className="flex flex-col">
+              <span className="font-label-md text-label-md text-primary font-bold">Analyze</span>
+              <span className="font-label-sm text-[10px] text-on-surface-variant leading-none">பகுப்பாய்வு</span>
+            </div>
+          </div>
+          <span className="material-symbols-outlined text-[16px] text-outline-variant">chevron_right</span>
+
+          {/* Step 3 */}
+          <div className="flex items-center gap-1.5 text-primary">
+            <div className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center font-label-sm text-label-sm font-bold shadow-sm ring-2 ring-primary-fixed">
+              3
+            </div>
+            <div className="flex flex-col">
+              <span className="font-label-md text-label-md text-primary font-bold">Act</span>
+              <span className="font-label-sm text-[10px] text-on-surface-variant leading-none">நடவடிக்கை</span>
+            </div>
+          </div>
+        </div>
+        {/* Progress Meter (100%) */}
+        <div className="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+          <div className="h-full bg-secondary rounded-full w-full transition-all duration-300"></div>
+        </div>
+      </div>
+
       {/* Title & Delight Header */}
       <div className="flex flex-col gap-space-xs text-left">
         <div className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-label-md font-label-md">
@@ -172,6 +216,14 @@ No report was submitted to any authority.
 
       {/* Status Lifecycle Stepper */}
       <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm">
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">
+            Civic Escalation Lifecycle
+          </span>
+          <span className="font-label-sm text-[10px] text-on-surface-variant font-semibold">
+            Status: {currentStatus}
+          </span>
+        </div>
         <div className="flex items-center justify-between text-center relative">
           <div className="absolute left-6 right-6 top-3.5 h-[2px] bg-surface-container -z-0"></div>
           
@@ -353,6 +405,8 @@ No report was submitted to any authority.
         <div className="grid grid-cols-2 gap-space-sm">
           <button
             onClick={handleCopyReport}
+            title="Copy entire formatted docket text"
+            aria-label="Copy entire formatted docket text"
             className="min-h-[48px] px-space-sm py-2 rounded-xl bg-surface-container-lowest text-primary hover:bg-surface-container-high transition-all shadow-xs flex items-center justify-center gap-2 font-label-lg text-label-lg active:scale-95 text-left"
           >
             <span className="material-symbols-outlined text-[20px] text-secondary">
@@ -363,6 +417,8 @@ No report was submitted to any authority.
 
           <button
             onClick={handleDownloadReport}
+            title="Download text report"
+            aria-label="Download text report"
             className="min-h-[48px] px-space-sm py-2 rounded-xl bg-surface-container-lowest text-primary hover:bg-surface-container-high transition-all shadow-xs flex items-center justify-center gap-2 font-label-lg text-label-lg active:scale-95 text-left"
           >
             <span className="material-symbols-outlined text-[20px] text-secondary">download</span>
@@ -371,6 +427,8 @@ No report was submitted to any authority.
 
           <button
             onClick={handleShareReport}
+            title="Share report docket"
+            aria-label="Share report docket"
             className="min-h-[48px] px-space-sm py-2 rounded-xl bg-surface-container-lowest text-primary hover:bg-surface-container-high transition-all shadow-xs flex items-center justify-center gap-2 font-label-lg text-label-lg active:scale-95 text-left"
           >
             <span className="material-symbols-outlined text-[20px] text-secondary">share</span>
@@ -379,6 +437,8 @@ No report was submitted to any authority.
 
           <button
             onClick={handlePrint}
+            title="Print entire civic docket"
+            aria-label="Print entire civic docket"
             className="min-h-[48px] px-space-sm py-2 rounded-xl bg-surface-container-lowest text-primary hover:bg-surface-container-high transition-all shadow-xs flex items-center justify-center gap-2 font-label-lg text-label-lg active:scale-95 text-left"
           >
             <span className="material-symbols-outlined text-[20px] text-secondary">print</span>

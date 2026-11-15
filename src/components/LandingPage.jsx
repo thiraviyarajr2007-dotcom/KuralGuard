@@ -2,7 +2,7 @@ import React from 'react';
 import { DEMO_METRICS, CATEGORIES } from '../data/mockData';
 import { t } from '../lang';
 
-export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreDashboard, onGoToResources }) {
+export function LandingPage({ lang = 'en', onLangChange, onStartReport, onLoadDemo, onExploreDashboard, onGoToResources }) {
   return (
     <div className="space-y-8 py-4 px-gutter-mobile">
       
@@ -28,10 +28,26 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
           </div>
           <div className="flex-shrink-0">
             <div className="inline-flex items-center p-1 rounded-full bg-surface-container text-on-surface text-[11px] font-bold">
-              <button className="px-2 py-0.5 rounded-full bg-primary text-on-primary shadow-xs transition-all">
+              <button
+                type="button"
+                onClick={() => onLangChange && onLangChange('en')}
+                className={`px-2 py-0.5 rounded-full transition-all ${
+                  lang === 'en'
+                    ? 'bg-primary text-on-primary shadow-xs'
+                    : 'text-on-surface-variant hover:text-on-surface'
+                }`}
+              >
                 EN
               </button>
-              <button className="px-2 py-0.5 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+              <button
+                type="button"
+                onClick={() => onLangChange && onLangChange('ta')}
+                className={`px-2 py-0.5 rounded-full transition-all ${
+                  lang === 'ta'
+                    ? 'bg-primary text-on-primary shadow-xs'
+                    : 'text-on-surface-variant hover:text-on-surface'
+                }`}
+              >
                 தமிழ்
               </button>
             </div>
@@ -64,6 +80,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
         <div className="flex flex-col sm:flex-row gap-space-sm pt-1">
           <button
             onClick={onStartReport}
+            aria-label="Report an Issue"
             className="w-full min-h-[52px] px-space-lg rounded-xl bg-primary text-on-primary font-headline-sm text-headline-sm flex items-center justify-center gap-space-xs shadow-md transition-all active:scale-[0.98] group"
           >
             <span>Create a Safety Brief</span>
@@ -74,6 +91,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
 
           <button
             onClick={onLoadDemo}
+            aria-label="Try Demo"
             className="w-full min-h-[48px] px-space-md rounded-xl bg-surface-container-high text-primary font-label-lg text-label-lg flex items-center justify-center gap-space-xs transition-colors hover:bg-surface-container-highest"
           >
             <span className="material-symbols-outlined text-[18px] text-secondary">play_circle</span>
@@ -142,7 +160,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
             </span>
           </div>
           <span className="font-label-sm text-[10px] px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-fixed font-bold tracking-tight">
-            SAMPLE DEMO DATA
+            Demonstration Impact Metrics
           </span>
         </div>
 
@@ -151,7 +169,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
             <span className="font-headline-sm text-headline-sm font-extrabold text-primary">
               {DEMO_METRICS.totalReports}
             </span>
-            <span className="font-label-sm text-label-sm text-on-surface-variant">Reports Filed</span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant">Total Hazards</span>
           </div>
 
           <div className="bg-error-container/40 p-3 rounded-xl shadow-xs flex flex-col">
@@ -159,7 +177,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
               {DEMO_METRICS.highRisk}
             </span>
             <span className="font-label-sm text-label-sm text-on-error-container font-semibold">
-              High Priority
+              High Risk Identified
             </span>
           </div>
 
@@ -168,7 +186,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
               {DEMO_METRICS.resolved}
             </span>
             <span className="font-label-sm text-label-sm text-on-secondary-fixed-variant font-semibold">
-              Actions Taken
+              Resolved / Safe
             </span>
           </div>
         </div>
@@ -259,7 +277,7 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
             <span className="material-symbols-outlined text-[22px]">directions_run</span>
           </div>
           <div className="flex flex-col min-w-0">
-            <h3 className="font-title-md text-title-md text-primary font-bold">2. Immediate Guidance</h3>
+            <h3 className="font-title-md text-title-md text-primary font-bold">2. Get Safe Guidance</h3>
             <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
               Actionable transit safety protocols for students walking home, school escorts, and van operators.
             </p>
@@ -272,9 +290,9 @@ export function LandingPage({ lang = 'en', onStartReport, onLoadDemo, onExploreD
             <span className="material-symbols-outlined text-[22px]">account_balance</span>
           </div>
           <div className="flex flex-col min-w-0">
-            <h3 className="font-title-md text-title-md text-primary font-bold">3. Verifiable Civic Briefs</h3>
+            <h3 className="font-title-md text-title-md text-primary font-bold">3. Support Community Action</h3>
             <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
-              One-tap structured PDF/WhatsApp dossiers formatted specifically for Ward Councillors, PTAs, and Police Patrols.
+              Create a Clear Report • One-tap structured PDF/WhatsApp dossiers formatted specifically for Ward Councillors, PTAs, and Police Patrols.
             </p>
           </div>
         </div>

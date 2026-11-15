@@ -73,8 +73,25 @@ export function ReportIssuePage({
     setFormData(prev => ({
       ...prev,
       imagePreview: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-      imageName: 'sample_hazard_field_photo.jpg'
+      imageName: 'sample_crossing_hazard_photo.jpg'
     }));
+  };
+
+  const handleAppendTag = (tag) => {
+    setFormData(prev => ({
+      ...prev,
+      description: prev.description ? `${prev.description.trim()} [${tag}]` : `[${tag}] `
+    }));
+    if (errors.description) setErrors(prev => ({ ...prev, description: null }));
+  };
+
+  const handleGpsLocate = () => {
+    setFormData(prev => ({
+      ...prev,
+      location: "Near St. Anthony's Gate & Gandhi Road Junction, Ward 14"
+    }));
+    if (errors.location) setErrors(prev => ({ ...prev, location: null }));
+    showToast("GPS location verified: Ward 14, Zone 5 (Accurate to 4m)", "success");
   };
 
   const validateAndProceed = (e) => {
@@ -157,7 +174,9 @@ export function ReportIssuePage({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <h2 className="font-title-md text-title-md text-primary font-bold tracking-tight">Create Safety Brief</h2>
+            <h2 className="font-title-md text-title-md text-primary font-bold tracking-tight">
+              Create Safety Brief: Report a Civic Concern
+            </h2>
             <span className="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold uppercase tracking-wider">Step 1/3</span>
           </div>
           <p className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
@@ -175,6 +194,10 @@ export function ReportIssuePage({
           </label>
           <span className="font-label-sm text-label-sm text-secondary font-semibold">Select 1</span>
         </div>
+
+        {errors.category && (
+          <p className="text-error text-xs font-semibold">{errors.category}</p>
+        )}
 
         <div className="flex gap-2 overflow-x-auto pb-1.5 pt-0.5 -mx-gutter-mobile px-gutter-mobile scrollbar-none">
           {CATEGORIES.map((cat) => {
@@ -233,12 +256,33 @@ export function ReportIssuePage({
             />
             <button
               type="button"
+              onClick={handleGpsLocate}
               aria-label="Auto detect location via GPS"
+              title="GPS Auto-locate"
               className="p-1 rounded-full bg-secondary-container text-on-secondary-fixed flex-shrink-0 hover:opacity-90 active:scale-95 transition-transform"
             >
               <span className="material-symbols-outlined text-[18px]">my_location</span>
             </button>
           </div>
+          {/* Inline mini-map GPS status confirmation */}
+          <div className="w-full bg-surface-container-low rounded-lg p-2.5 flex items-center justify-between border border-surface-container-high">
+            <div className="flex items-center gap-1.5 truncate">
+              <span className="material-symbols-outlined text-error text-[16px]">location_on</span>
+              <span className="font-label-sm text-label-sm text-on-surface font-semibold truncate">
+                {formData.location ? `${formData.location} • Verified` : 'Ward 14, Zone 5 • GPS Geocoded'}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleGpsLocate}
+              className="text-secondary font-label-sm text-label-sm font-bold flex-shrink-0 hover:underline"
+            >
+              Update
+            </button>
+          </div>
+          {errors.location && (
+            <p className="text-error text-xs font-semibold px-1">{errors.location}</p>
+          )}
           <p className="font-body-sm text-body-sm text-on-surface-variant px-1">
             Keep it specific so student commuters and ward responders can locate it safely without confusion.
           </p>
@@ -266,11 +310,32 @@ export function ReportIssuePage({
             placeholder="Describe what occurred, any hazards, affected school or transit paths..."
             className="w-full bg-surface-container-low rounded-lg p-3 text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-lowest placeholder:text-outline resize-none transition-colors"
           />
+          {errors.description && (
+            <p className="text-error text-xs font-semibold">{errors.description}</p>
+          )}
           <div className="flex items-center gap-1.5 flex-wrap pt-1">
             <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Suggested:</span>
-            <button type="button" className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container-highest">+ Missing Signage</button>
-            <button type="button" className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container-highest">+ High Dispersal Rush</button>
-            <button type="button" className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container-highest">+ Blind Turn</button>
+            <button
+              type="button"
+              onClick={() => handleAppendTag('Missing Signage')}
+              className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container-highest transition-colors active:scale-95"
+            >
+              + Missing Signage
+            </button>
+            <button
+              type="button"
+              onClick={() => handleAppendTag('High Dispersal Rush')}
+              className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container-highest transition-colors active:scale-95"
+            >
+              + High Dispersal Rush
+            </button>
+            <button
+              type="button"
+              onClick={() => handleAppendTag('Blind Turn')}
+              className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container-highest transition-colors active:scale-95"
+            >
+              + Blind Turn
+            </button>
           </div>
         </div>
       </section>
@@ -402,40 +467,101 @@ export function ReportIssuePage({
         )}
       </section>
 
-      {/* FIELD 6: Anonymous Toggle */}
-      <section className="flex flex-col gap-2">
-        <label className="font-label-lg text-label-lg text-primary flex items-center gap-1.5">
-          <span>6. Privacy Option</span>
-        </label>
-
-        <div className="bg-surface-container-lowest rounded-xl p-3.5 shadow-sm flex items-start gap-3">
-          <input
-            id="anonymous-toggle"
-            type="checkbox"
-            checked={formData.isAnonymous}
-            onChange={(e) => setFormData(prev => ({ ...prev, isAnonymous: e.target.checked }))}
-            className="mt-1 w-5 h-5 text-secondary rounded-md border-surface-container-high focus:ring-2 focus:ring-secondary"
-          />
-          <div className="flex-1">
-            <label htmlFor="anonymous-toggle" className="text-sm font-bold text-on-surface flex items-center gap-1.5 cursor-pointer">
-              <span className="material-symbols-outlined text-[18px] text-secondary">lock</span>
-              <span>Submit Anonymously</span>
-            </label>
-            <p className="text-xs text-on-surface-variant mt-0.5">
-              Protects student identity. IP & contact info will not appear on public dockets.
+      {/* FIELD 6: Anonymous Reporting Switch */}
+      <section className="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-full bg-secondary-container/40 text-on-secondary-fixed flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span className="material-symbols-outlined text-[20px]">visibility_off</span>
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className="font-label-lg text-label-lg text-primary font-bold">Anonymous Reporting</span>
+              <span className="px-1.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant text-[9px] font-bold uppercase tracking-wider">
+                {formData.isAnonymous ? 'Active' : 'Inactive'}
+              </span>
+            </div>
+            <span className="font-label-sm text-label-sm text-on-surface-variant font-medium mt-0.5">அடையாளம் மறைக்க • Submit Anonymously</span>
+            <p className="font-body-sm text-[12px] text-on-surface-variant mt-1 leading-snug">
+              Your name and student enrollment ID will stay encrypted. Public safety briefs display your community trust tier without personal identity.
             </p>
           </div>
         </div>
+        {/* Modern Toggle Switch */}
+        <button
+          id="anonToggle"
+          role="switch"
+          type="button"
+          aria-checked={formData.isAnonymous}
+          aria-label="Toggle anonymous reporting"
+          onClick={() => setFormData(prev => ({ ...prev, isAnonymous: !prev.isAnonymous }))}
+          className={`w-12 h-7 rounded-full relative p-0.5 flex-shrink-0 cursor-pointer transition-colors shadow-inner mt-1 ${
+            formData.isAnonymous ? 'bg-primary' : 'bg-surface-container-highest'
+          }`}
+        >
+          <span
+            className={`w-6 h-6 rounded-full bg-secondary-container shadow-sm transform transition-transform flex items-center justify-center ${
+              formData.isAnonymous ? 'translate-x-5' : 'translate-x-0'
+            }`}
+          >
+            <span className="material-symbols-outlined text-on-secondary-fixed text-[14px]">
+              {formData.isAnonymous ? 'lock' : 'lock_open'}
+            </span>
+          </span>
+        </button>
       </section>
 
+      {/* FIELD 7: Preferred Language Selector */}
+      <section className="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-surface-container text-primary flex items-center justify-center flex-shrink-0">
+            <span className="material-symbols-outlined text-[20px]">translate</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-label-lg text-label-lg text-primary font-bold">Preferred Brief Language</span>
+            <span className="font-label-sm text-label-sm text-on-surface-variant">அறிக்கையின் மொழி</span>
+          </div>
+        </div>
+        <div className="inline-flex items-center p-1 rounded-full bg-surface-container text-on-surface text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => setFormData(prev => ({ ...prev, language: 'en' }))}
+            className={`px-3 py-1 rounded-full transition-all ${
+              formData.language === 'en'
+                ? 'bg-primary text-on-primary shadow-xs'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            onClick={() => setFormData(prev => ({ ...prev, language: 'ta' }))}
+            className={`px-3 py-1 rounded-full transition-all ${
+              formData.language === 'ta'
+                ? 'bg-primary text-on-primary shadow-xs'
+                : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            தமிழ்
+          </button>
+        </div>
+      </section>
+
+      {/* Micro Civic Trust Assurance */}
+      <div className="flex items-center justify-center gap-2 text-on-surface-variant py-1">
+        <span className="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+        <span className="font-label-sm text-label-sm">Protected by KuralGuard Civic Verifier • 256-bit Student Guard</span>
+      </div>
+
       {/* Submit Button */}
-      <div className="flex flex-col gap-space-sm pt-space-lg">
+      <div className="flex flex-col gap-space-sm pt-space-md">
         <button
+          type="button"
           onClick={validateAndProceed}
-          disabled={!isValid}
-          className="w-full py-3.5 px-space-md rounded-xl bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-space-xs shadow-lg active:scale-[0.99] transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Submit report and proceed to AI analysis"
+          className="w-full py-3.5 px-space-md rounded-xl bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-space-xs shadow-lg active:scale-[0.99] transition-transform"
         >
-          <span>Proceed to AI Analysis</span>
+          <span>Continue to AI Analysis</span>
           <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
         </button>
 
@@ -443,10 +569,11 @@ export function ReportIssuePage({
           <button
             type="button"
             onClick={onPrefillSample}
+            aria-label="Pre-fill sample scenario"
             className="w-full py-2.5 text-center font-label-md text-label-md text-secondary hover:text-primary transition-colors flex items-center justify-center gap-1"
           >
             <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
-            Pre-fill Sample Scenario
+            <span>Pre-fill sample scenario</span>
           </button>
         )}
       </div>

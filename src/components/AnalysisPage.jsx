@@ -180,16 +180,22 @@ export function AnalysisPage({
                 <span className="material-symbols-outlined text-[16px] text-secondary-container" style={{ fontVariationSettings: '"FILL" 1' }}>
                   bolt
                 </span>
-                <span className="font-label-sm text-label-sm tracking-wide">Demo AI-Assisted Analysis</span>
+                <span className="font-label-sm text-label-sm tracking-wide">Demo AI-assisted analysis</span>
               </div>
               <div className="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                 <span>Model v2.4 Live</span>
               </div>
             </div>
+
+            <h1 className="font-headline-sm text-headline-sm text-primary font-bold">
+              Safety Assessment & Hazard Triage
+            </h1>
+
             <div className="bg-surface-container-low p-space-sm rounded-xl flex items-start gap-space-xs shadow-sm">
               <span className="material-symbols-outlined text-[18px] text-outline flex-shrink-0 mt-0.5">info</span>
               <p className="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+                <strong className="font-semibold text-primary">AI Estimation Disclaimer: </strong>
                 This is an AI-assisted demo estimate and should not replace verified emergency services or professional civic judgment.
               </p>
             </div>
@@ -235,7 +241,7 @@ export function AnalysisPage({
           <div className="flex flex-col gap-space-xs">
             <div className="flex items-center gap-1.5 text-on-surface">
               <span className="material-symbols-outlined text-[20px] text-secondary">radar</span>
-              <h2 className="font-headline-sm text-headline-sm font-bold">What We Detected</h2>
+              <h2 className="font-headline-sm text-headline-sm font-bold">What we detected</h2>
             </div>
             <div className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm text-on-surface font-body-md text-body-md leading-relaxed">
               {analysisData?.summary || `Identified ${formData.category} hazard near ${formData.location || 'the specified location'}. Physical conditions present an elevated risk of injury or disruption to commuters.`}
@@ -303,7 +309,7 @@ export function AnalysisPage({
               <div className="bg-primary-container p-space-sm rounded-lg flex items-start gap-space-xs">
                 <span className="material-symbols-outlined text-secondary-container text-[22px] flex-shrink-0">navigation</span>
                 <p className="font-body-md text-body-md text-surface-container-high leading-snug">
-                  <strong className="text-on-primary">Avoid crossing alone.</strong> Use the traffic-warden assisted junction <span className="text-secondary-fixed-dim underline underline-offset-2">120m north</span> near Main Gate. Cross only in monitored cohorts.
+                  <strong className="text-on-primary">Avoid crossing alone.</strong> Use the traffic-warden assisted junction <span className="text-secondary-fixed-dim underline underline-offset-2">120m north</span> near Main Gate. Cross only in monitored cohorts. In an immediate danger or acute transit hazard, dial 112 for Police Rapid Response or 108 for Emergency Medical Assistance.
                 </p>
               </div>
             </div>
@@ -340,9 +346,10 @@ export function AnalysisPage({
           <div className="flex flex-col gap-space-sm">
             <button
               onClick={onContinueToReport}
+              aria-label="Create Safety Brief"
               className="w-full py-3.5 px-space-md rounded-xl bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-space-xs shadow-lg active:scale-[0.99] transition-transform"
             >
-              <span>Generate Shareable Brief</span>
+              <span>Create Safety Brief</span>
               <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
             </button>
             <button

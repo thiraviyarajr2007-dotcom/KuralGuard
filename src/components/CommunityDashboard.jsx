@@ -10,20 +10,62 @@ export function CommunityDashboard({
   onViewReportDetails 
 }) {
   const [filter, setFilter] = useState('all');
+  const [severityFilter, setSeverityFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('newest');
   const [searchQuery, setSearchQuery] = useState('');
   const [inspectReport, setInspectReport] = useState(null);
 
   const filteredReports = useMemo(() => {
-    return reports.filter(report => {
-      const matchesFilter = filter === 'all' || 
-        (filter === 'resolved' && report.status === 'Resolved') ||
-        (filter === 'pending' && report.status !== 'Resolved');
+    let result = reports.filter(report => {
+      // 1. Text Search Query
       const matchesSearch = !searchQuery || 
         report.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        report.location?.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesFilter && matchesSearch;
+        report.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        report.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        report.category?.toLowerCase().includes(searchQuery.toLowerCase());
+      if (!matchesSearch) return false;
+
+      // 2. Status or Category Filter
+      let matchesFilter = true;
+      if (filter === 'all') {
+        matchesFilter = true;
+      } else if (filter === 'resolved') {
+        matchesFilter = report.status === 'Resolved';
+      } else if (filter === 'pending') {
+        matchesFilter = report.status !== 'Resolved';
+      } else if (filter === 'road safety') {
+        matchesFilter = report.category === 'Road Safety' || report.category?.toLowerCase().includes('road');
+      } else if (filter === 'public lighting') {
+        matchesFilter = report.category === 'Public Lighting' || report.category?.toLowerCase().includes('light');
+      } else if (filter === 'flooding') {
+        matchesFilter = report.category === 'Flooding' || report.category?.toLowerCase().includes('flood');
+      } else if (filter === "women's safety") {
+        matchesFilter = report.category?.includes("Women") || report.category?.toLowerCase().includes('women');
+      } else if (filter === 'sanitation') {
+        matchesFilter = report.category === 'Waste and Sanitation' || report.category?.toLowerCase().includes('waste') || report.category?.toLowerCase().includes('sanitation');
+      } else {
+        matchesFilter = report.category?.toLowerCase() === filter.toLowerCase();
+      }
+      if (!matchesFilter) return false;
+
+      // 3. Severity Filter
+      if (severityFilter === 'high') {
+        return report.riskLevel === 'High' || report.urgency === 'High';
+      } else if (severityFilter === 'med') {
+        return report.riskLevel === 'Medium' || report.urgency === 'Medium' || report.riskLevel === 'Moderate';
+      } else if (severityFilter === 'low') {
+        return report.riskLevel === 'Low' || report.urgency === 'Low';
+      }
+
+      return true;
     });
-  }, [reports, filter, searchQuery]);
+
+    if (sortBy === 'urgency') {
+      const urgencyScore = { High: 3, Medium: 2, Moderate: 2, Low: 1 };
+      result.sort((a, b) => (urgencyScore[b.riskLevel || b.urgency] || 0) - (urgencyScore[a.riskLevel || a.urgency] || 0));
+    }
+    return result;
+  }, [reports, filter, searchQuery, severityFilter, sortBy]);
 
   const stats = useMemo(() => ({
     total: reports.length,
@@ -50,6 +92,9 @@ export function CommunityDashboard({
         <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight font-extrabold">
           Community Safety Priority
         </h1>
+        <div className="text-xs font-bold text-secondary uppercase tracking-wider">
+          Community Safety Registry
+        </div>
         <p className="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
           Live community reports and civic action queue for Ward 14 & school zones.
         </p>
@@ -58,7 +103,7 @@ export function CommunityDashboard({
       {/* Metric Summary Bento Grid */}
       <div className="grid grid-cols-2 gap-space-sm">
         {/* Card 1: Total Reports */}
-        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+        <div className="bg-white bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
           <div className="flex items-center justify-between">
             <span className="font-label-md text-label-md text-on-surface-variant">Total Reports</span>
             <div className="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-primary">
@@ -66,7 +111,7 @@ export function CommunityDashboard({
             </div>
           </div>
           <div>
-            <div className="font-headline-md text-headline-md text-primary font-bold">{stats.total}</div>
+            <div className="text-4xl font-headline-md text-headline-md text-primary font-bold">{stats.total}</div>
             <div className="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary font-semibold">
               <span className="material-symbols-outlined text-[14px]">trending_up</span>
               +{Math.floor(stats.total * 0.1)} this week
@@ -75,15 +120,15 @@ export function CommunityDashboard({
         </div>
 
         {/* Card 2: High Risk */}
-        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+        <div className="bg-white bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-label-md text-on-surface-variant">High-Risk</span>
+            <span className="font-label-md text-label-md text-on-surface-variant">High-Risk Issues</span>
             <div className="w-7 h-7 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
               <span className="material-symbols-outlined text-[16px]">crisis_alert</span>
             </div>
           </div>
           <div>
-            <div className="font-headline-md text-headline-md text-error font-bold">{stats.highRisk} Alerts</div>
+            <div className="text-4xl font-headline-md text-headline-md text-error font-bold">{stats.highRisk}</div>
             <span className="inline-block px-2 py-0.5 rounded-full bg-error-container/60 text-on-error-container text-label-sm font-label-sm font-bold">
               Urgent Action
             </span>
@@ -91,15 +136,15 @@ export function CommunityDashboard({
         </div>
 
         {/* Card 3: Resolved */}
-        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+        <div className="bg-white bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-label-md text-on-surface-variant">Resolved</span>
+            <span className="font-label-md text-label-md text-on-surface-variant">Resolved Reports</span>
             <div className="w-7 h-7 rounded-full bg-secondary-container/40 text-on-secondary-fixed flex items-center justify-center">
               <span className="material-symbols-outlined text-[16px]">check_circle</span>
             </div>
           </div>
           <div>
-            <div className="font-headline-md text-headline-md text-secondary font-bold">{stats.resolved} Done</div>
+            <div className="text-4xl font-headline-md text-headline-md text-secondary font-bold">{stats.resolved}</div>
             <span className="inline-block px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-container text-label-sm font-label-sm font-bold">
               {Math.round((stats.resolved / stats.total) * 100)}% cleared
             </span>
@@ -107,9 +152,9 @@ export function CommunityDashboard({
         </div>
 
         {/* Card 4: Most Common */}
-        <div className="bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
+        <div className="bg-white bg-surface-container-lowest p-space-md rounded-2xl shadow-sm flex flex-col justify-between space-y-space-xs">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-label-md text-on-surface-variant">Top Area</span>
+            <span className="font-label-md text-label-md text-on-surface-variant">Category Breakdown</span>
             <div className="w-7 h-7 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
               <span className="material-symbols-outlined text-[16px]">traffic</span>
             </div>
@@ -133,7 +178,7 @@ export function CommunityDashboard({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by keyword, location, or school name..."
+            placeholder="Search reports by title, keyword, location, or school name..."
             className="w-full bg-surface-container-lowest text-on-surface placeholder:text-outline text-body-sm font-body-sm rounded-xl py-3 pl-10 pr-4 shadow-sm focus:outline-none focus:bg-surface-container-low transition-all"
           />
         </div>
@@ -165,21 +210,49 @@ export function CommunityDashboard({
         {/* Severity & Sorting Filter Row */}
         <div className="flex items-center justify-between pt-1">
           <div className="flex items-center gap-1">
-            <button className="px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setSeverityFilter(prev => prev === 'high' ? 'all' : 'high')}
+              className={`px-2.5 py-1 rounded-full font-label-sm text-label-sm font-bold flex items-center gap-1 transition-all ${
+                severityFilter === 'high'
+                  ? 'bg-error text-on-error shadow-xs ring-2 ring-error'
+                  : 'bg-error-container text-on-error-container hover:opacity-90'
+              }`}
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
               High Risk
             </button>
-            <button className="px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+            <button
+              type="button"
+              onClick={() => setSeverityFilter(prev => prev === 'med' ? 'all' : 'med')}
+              className={`px-2.5 py-1 rounded-full font-label-sm text-label-sm transition-all ${
+                severityFilter === 'med'
+                  ? 'bg-primary text-on-primary font-bold shadow-xs'
+                  : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'
+              }`}
+            >
               Med
             </button>
-            <button className="px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+            <button
+              type="button"
+              onClick={() => setSeverityFilter(prev => prev === 'low' ? 'all' : 'low')}
+              className={`px-2.5 py-1 rounded-full font-label-sm text-label-sm transition-all ${
+                severityFilter === 'low'
+                  ? 'bg-primary text-on-primary font-bold shadow-xs'
+                  : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'
+              }`}
+            >
               Low
             </button>
           </div>
-          <div className="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+          <button
+            type="button"
+            onClick={() => setSortBy(prev => prev === 'urgency' ? 'newest' : 'urgency')}
+            className="flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-sm text-label-sm transition-colors cursor-pointer"
+          >
             <span className="material-symbols-outlined text-[16px] text-secondary">swap_vert</span>
-            <span className="truncate">Urgency & Proximity</span>
-          </div>
+            <span className="truncate">{sortBy === 'urgency' ? 'Priority Order (Urgency)' : 'Urgency & Proximity'}</span>
+          </button>
         </div>
       </div>
 
@@ -191,9 +264,21 @@ export function CommunityDashboard({
         </div>
 
         {filteredReports.length === 0 ? (
-          <div className="bg-surface-container-lowest rounded-xl p-8 text-center">
-            <span className="material-symbols-outlined text-[48px] text-on-surface-variant mb-2">inbox</span>
-            <p className="font-body-md text-body-md text-on-surface-variant">No reports found</p>
+          <div className="bg-surface-container-lowest rounded-xl p-8 text-center flex flex-col items-center justify-center gap-2">
+            <span className="material-symbols-outlined text-[48px] text-on-surface-variant mb-1">inbox</span>
+            <p className="font-title-md text-title-md text-primary font-bold">No reports match your filters</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Try resetting filters or searching with a different term.</p>
+            <button
+              type="button"
+              onClick={() => {
+                setFilter('all');
+                setSeverityFilter('all');
+                setSearchQuery('');
+              }}
+              className="mt-2 px-4 py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-label-md text-label-md font-bold transition-colors"
+            >
+              Reset Filters
+            </button>
           </div>
         ) : (
           filteredReports.map((report, idx) => (
@@ -284,13 +369,15 @@ export function CommunityDashboard({
                 {/* Action buttons */}
                 <div className="flex gap-2 pt-2">
                   <button
+                    type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       onViewReportDetails(report);
                     }}
-                    className="flex-1 py-2 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors"
+                    className="flex-1 py-2 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md font-bold flex items-center justify-center gap-1.5 hover:bg-surface-container-high transition-colors"
                   >
-                    View Details
+                    <span className="material-symbols-outlined text-[18px]">description</span>
+                    <span>View Brief</span>
                   </button>
                   <button
                     onClick={(e) => {

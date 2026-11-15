@@ -67,14 +67,14 @@ function validPage(page) {
 function NotFoundPage({ lang, onHome, onReport, onResources }) {
   return (
     <div className="max-w-2xl mx-auto py-16 sm:py-24 text-center space-y-6">
-      <div className="mx-auto w-16 h-16 rounded-2xl bg-amber-950/70 border border-amber-500/40 flex items-center justify-center">
-        <FileWarning className="w-8 h-8 text-amber-300" />
+      <div className="mx-auto w-16 h-16 rounded-2xl bg-surface-container-high border border-outline-variant flex items-center justify-center">
+        <span className="material-symbols-outlined text-[32px] text-tertiary-fixed-dim">warning</span>
       </div>
       <div className="space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight">
           {lang === 'ta' ? 'பக்கம் கிடைக்கவில்லை' : 'Page not found'}
         </h1>
-        <p className="text-slate-400 text-sm sm:text-base">
+        <p className="text-on-surface-variant text-sm sm:text-base">
           {lang === 'ta'
             ? 'நீங்கள் கோரிய பாதை இந்த டெமோவில் இல்லை. பாதுகாப்பான வழியில் தொடருங்கள்.'
             : 'The route you requested is not available in this demo. Continue through a safe path below.'}
@@ -84,22 +84,22 @@ function NotFoundPage({ lang, onHome, onReport, onResources }) {
         <button
           type="button"
           onClick={onHome}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-civic-teal-DEFAULT hover:bg-teal-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-on-primary bg-primary hover:bg-primary-container transition-colors"
         >
-          <Compass className="w-4 h-4" />
+          <span className="material-symbols-outlined text-[18px]">home</span>
           <span>{t(lang, 'nav.home')}</span>
         </button>
         <button
           type="button"
           onClick={onReport}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-teal-300 bg-navy-800 border border-teal-500/40 hover:bg-navy-700 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-primary bg-surface-container border border-surface-container-high hover:bg-surface-container-highest transition-colors"
         >
           <span>{t(lang, 'nav.reportIssue')}</span>
         </button>
         <button
           type="button"
           onClick={onResources}
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-slate-200 bg-navy-900 border border-navy-700 hover:bg-navy-800 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-on-surface bg-surface-container-low border border-surface-container hover:bg-surface-container transition-colors"
         >
           <span>{t(lang, 'docket.resources')}</span>
         </button>
@@ -343,6 +343,7 @@ function MainApp() {
         {activePage === 'landing' && (
           <LandingPage
             lang={lang}
+            onLangChange={setLang}
             onStartReport={() => navigateTo('report')}
             onLoadDemo={handleLoadDemo}
             onExploreDashboard={() => navigateTo('dashboard')}
