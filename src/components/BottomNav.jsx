@@ -36,7 +36,7 @@ export function BottomNav({ activePage, setActivePage, lang = 'en' }) {
                 <div className="w-10 h-10 -mt-3.5 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-[0_4px_12px_rgba(0,103,125,0.3)] transition-transform hover:scale-105">
                   <span className="material-symbols-outlined text-[24px]">{item.icon}</span>
                 </div>
-                <span className="font-label-sm text-label-sm mt-0.5">{item.label}</span>
+                <span className={`font-label-sm text-label-sm mt-0.5 ${isActive ? 'text-primary font-bold' : 'text-on-surface-variant'}`}>{item.label}</span>
               </button>
             );
           }

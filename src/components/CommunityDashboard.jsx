@@ -319,6 +319,23 @@ export function CommunityDashboard({
                   {report.title}
                 </h2>
 
+                {/* Context visual preview */}
+                {report.imageUrl && (
+                  <div className="relative w-full h-36 rounded-xl overflow-hidden bg-surface-container my-1">
+                    <img
+                      src={report.imageUrl}
+                      alt={report.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent flex items-end p-2.5">
+                      <div className="flex items-center gap-1 text-on-primary font-label-sm text-label-sm font-medium">
+                        <span className="material-symbols-outlined text-[16px] text-secondary-fixed">pin_drop</span>
+                        {report.location}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Info meta pills */}
                 <div className="bg-surface-container-low rounded-xl p-space-sm space-y-1.5">
                   <div className="flex items-start gap-2">
@@ -400,14 +417,49 @@ export function CommunityDashboard({
         )}
       </div>
 
-      {/* Add New Report Button */}
-      <button
-        onClick={onStartNewReport}
-        className="w-full min-h-[52px] rounded-xl bg-primary text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-space-xs shadow-md active:scale-[0.99] transition-transform"
-      >
-        <span className="material-symbols-outlined text-[20px]">add_circle</span>
-        <span>Report New Issue</span>
-      </button>
+      {/* Visual Community Map Card */}
+      <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-space-sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <h4 className="font-title-md text-title-md text-primary font-bold">Ward 14 Patrol & Hazard Radar</h4>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">4 active hot spots near school transit routes</p>
+          </div>
+          <span className="material-symbols-outlined text-secondary text-[24px]">map</span>
+        </div>
+        <div
+          className="w-full h-44 rounded-xl bg-surface-container overflow-hidden relative shadow-inner"
+          style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuASZ9yNBxaDb9jcUmZKhJIRFPB1r16xKiWKuppILd0IAsDznNKc11nEmzN0YPUGx3ypg8eFhl__J7DSxBiw-3ARitYbg4kr1rgMYb0gimN_ylxSaiSJgK13HSw9wRPZk1elD8JXIikypz0DgXJH1yvceGrpCF99E7sG3qGPeSsWrVq40pxdhCETk0bHihi6ZKYqnyvELQ-lTU-xb-n3kYUBLxuXCqPvS44rVsQb0J10')` }}
+        >
+          <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
+            <div className="bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-error animate-ping"></span>
+              <span className="font-label-sm text-label-sm text-primary font-bold">Live Cluster: Bharathi School Area</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Sticky-friendly Community Quick Action Box */}
+      <div className="bg-primary text-on-primary rounded-2xl p-space-md shadow-lg flex flex-col space-y-space-sm">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-on-secondary">
+              <span className="material-symbols-outlined text-[18px]">add_location_alt</span>
+            </div>
+            <div>
+              <div className="font-title-md text-title-md font-bold">Spot a new hazard?</div>
+              <div className="font-label-sm text-label-sm text-primary-fixed-dim">Reports directly notify Ward 14 committee</div>
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={onStartNewReport}
+          className="w-full py-3 px-4 rounded-xl bg-secondary-container text-on-secondary-fixed font-headline-sm text-headline-sm font-extrabold flex items-center justify-center gap-2 hover:opacity-95 shadow-md active:scale-[0.99] transition-transform"
+        >
+          <span className="material-symbols-outlined text-[20px]">campaign</span>
+          <span>Submit New Community Report</span>
+        </button>
+      </div>
 
       {/* Reset Demo Button */}
       <button

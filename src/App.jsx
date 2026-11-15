@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Navbar } from './components/Navbar';
 import { BottomNav } from './components/BottomNav';
 import { LandingPage } from './components/LandingPage';
@@ -37,10 +38,19 @@ const HASH_ROUTES = {
 };
 const SESSION_KEY = 'kuralguard.session.v1';
 
-function pageFromHash() {
+function pageFromLocation() {
   const hash = window.location.hash || '';
-  if (!hash) return null;
-  return HASH_ROUTES[hash] || 'not-found';
+  if (hash) {
+    const clean = hash.replace(/^#\/?/, '').split('?')[0];
+    if (!clean) return 'landing';
+    return VALID_PAGES.has(clean) ? clean : 'not-found';
+  }
+  const pathname = (window.location.pathname || '').replace(/^\/|\/$/g, '');
+  if (pathname) {
+    const segment = pathname.split('/')[0];
+    if (VALID_PAGES.has(segment)) return segment;
+  }
+  return null;
 }
 
 function hashForPage(page) {
@@ -111,12 +121,12 @@ function NotFoundPage({ lang, onHome, onReport, onResources }) {
 function MainApp() {
   const { showToast } = useToast();
   const [activePage, setActivePage] = useState(() => {
+    const locPage = pageFromLocation();
+    if (locPage) return locPage;
     const saved = readSession();
-    const hashPage = pageFromHash();
-    if (hashPage) return hashPage;
     return validPage(saved?.activePage || 'landing');
   });
-  const [pageHistory, setPageHistory] = useState(() => [validPage(readSession()?.activePage || 'landing')]);
+  const [pageHistory, setPageHistory] = useState(() => [validPage(pageFromLocation() || readSession()?.activePage || 'landing')]);
   const [reports, setReports] = useState(() => loadReports(INITIAL_COMMUNITY_REPORTS));
   const [formData, setFormData] = useState(() => {
     const saved = readSession();
@@ -140,14 +150,18 @@ function MainApp() {
 
   useEffect(() => {
     const syncRoute = () => {
-      const route = pageFromHash();
+      const route = pageFromLocation();
       if (!route) return;
       setActivePage(route);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.addEventListener('hashchange', syncRoute);
-    return () => window.removeEventListener('hashchange', syncRoute);
+    window.addEventListener('popstate', syncRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncRoute);
+      window.removeEventListener('popstate', syncRoute);
+    };
   }, []);
 
   const navigateTo = (pageId) => {
@@ -155,7 +169,10 @@ function MainApp() {
     setPageHistory((prev) => [...prev, next]);
     setActivePage(next);
     try {
-      window.location.hash = hashForPage(next);
+      const hash = hashForPage(next);
+      if (window.location.hash !== hash) {
+        window.location.hash = hash;
+      }
     } catch {
       // Hash routing is progressive enhancement only.
     }
@@ -239,22 +256,28 @@ function MainApp() {
     };
   };
 
+  const handleStartReport = () => {
+    setFormData(INITIAL_FORM_STATE);
+    setAnalysisError(null);
+    navigateTo('report');
+  };
+
   const handleLoadDemo = () => {
     const heroForm = {
       category: 'Road Safety',
-      location: 'School road crossing near campus',
-      description: 'பள்ளி நேரத்தில் இந்த சாலையை கடக்க மிகவும் ஆபத்தாக உள்ளது. வாகனங்கள் வேகமாக செல்கின்றன; zebra crossing மற்றும் street light இல்லை.',
+      location: 'Bharathi School Gate, Gandhi Road Junction, Ward 14',
+      description: 'Vehicles speeding past school gate during morning & evening dispersal. There is no zebra crossing or caution signage, and blind corner makes crossing hazardous for students.',
       urgency: 'High',
-      imagePreview: null,
-      imageName: '',
+      imagePreview: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvxrlYn-KaEJj0uRBHzTsoXrsgGorCLQg_njLzYj3eL6C4nnED5cjvImkqqldWZoXrtH0AFe9E_sL57afwsQxjO-qfPKdThetxcVKnbLv9wsIaKb9GDO2eEU3VaQR_FAqXDgJ6VDytzoVsXm8AXXeU47Ce-kYv-vA6FJjLmx62joo9GKBdRHzymU9Ee3Y_oqbZgLOMejAnKixAxWfCqEA-AgIdzygZTwAs7oDF7lUQ',
+      imageName: 'IMG_crossing_hazard_01.jpg',
       isAnonymous: true,
       language: 'ta',
     };
     setFormData(heroForm);
     setAnalysisError(null);
-    setCurrentReport(buildReportFromForm(heroForm));
+    setCurrentReport(DEMO_REPORT);
     navigateTo('analysis');
-    showToast('Loaded Tamil school-road-crossing demo scenario!', 'success');
+    showToast('Loaded Bharathi School crossing demo scenario!', 'success');
   };
 
   const handleResetDemo = () => {
@@ -269,15 +292,15 @@ function MainApp() {
   const handlePrefillSample = () => {
     setFormData({
       category: 'Road Safety',
-      location: 'South Access Road, Near Bus Shelter 4 & Girls Hostel Link',
-      description: 'A 4-foot deep excavated ditch has flooded with evening rainwater, partially submerging an uninsulated industrial power cable. Two streetlights above it are flickering violently. Commuters and evening students walking towards the bus stop must squeeze past with less than 2 feet clearance.',
+      location: "Near St. Anthony's Gate & Gandhi Road Junction, Ward 14",
+      description: 'Vehicles speeding past school gate during morning & evening dispersal. There is no zebra crossing or caution signage, and blind corner makes crossing hazardous for students.',
       urgency: 'High',
-      imagePreview: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-      imageName: 'high_voltage_ditch_evidence.jpg',
+      imagePreview: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvxrlYn-KaEJj0uRBHzTsoXrsgGorCLQg_njLzYj3eL6C4nnED5cjvImkqqldWZoXrtH0AFe9E_sL57afwsQxjO-qfPKdThetxcVKnbLv9wsIaKb9GDO2eEU3VaQR_FAqXDgJ6VDytzoVsXm8AXXeU47Ce-kYv-vA6FJjLmx62joo9GKBdRHzymU9Ee3Y_oqbZgLOMejAnKixAxWfCqEA-AgIdzygZTwAs7oDF7lUQ',
+      imageName: 'IMG_crossing_hazard_01.jpg',
       isAnonymous: true,
       language: 'en',
     });
-    showToast('Pre-filled sample road safety scenario!', 'info');
+    showToast('Pre-filled Bharathi School crossing scenario!', 'info');
   };
 
   const handleProceedToAnalysis = () => {
@@ -356,7 +379,7 @@ function MainApp() {
           <LandingPage
             lang={lang}
             onLangChange={setLang}
-            onStartReport={() => navigateTo('report')}
+            onStartReport={handleStartReport}
             onLoadDemo={handleLoadDemo}
             onExploreDashboard={() => navigateTo('dashboard')}
             onGoToResources={() => navigateTo('resources')}
@@ -377,7 +400,7 @@ function MainApp() {
           <AnalysisPage
             lang={lang}
             formData={formData}
-            analysisData={currentReport}
+            analysisData={currentReport || DEMO_REPORT}
             analysisError={analysisError}
             onRetryAnalysis={handleProceedToAnalysis}
             onContinueToReport={handleContinueToReport}
@@ -388,7 +411,7 @@ function MainApp() {
         {activePage === 'generated-report' && (
           <GeneratedReportPage
             lang={lang}
-            report={currentReport}
+            report={currentReport || DEMO_REPORT}
             onBackToAnalysis={() => navigateTo('analysis')}
             onSubmitToCommunity={handleSubmitToCommunity}
             onGoToDashboard={() => navigateTo('dashboard')}
@@ -401,7 +424,7 @@ function MainApp() {
             lang={lang}
             reports={reports}
             onToggleResolve={handleToggleResolve}
-            onStartNewReport={() => navigateTo('report')}
+            onStartNewReport={handleStartReport}
             onResetDemo={handleResetDemo}
             onViewReportDetails={(report) => {
               setCurrentReport(report);
@@ -445,8 +468,10 @@ function MainApp() {
 
 export default function App() {
   return (
-    <ToastProvider>
-      <MainApp />
-    </ToastProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        <MainApp />
+      </ToastProvider>
+    </ErrorBoundary>
   );
 }

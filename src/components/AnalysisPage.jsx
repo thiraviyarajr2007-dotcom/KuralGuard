@@ -234,6 +234,34 @@ export function AnalysisPage({
               <div className="w-full h-2 rounded-full bg-surface-container-high overflow-hidden">
                 <div className="h-full rounded-full bg-secondary-container transition-all duration-700" style={{ width: typeof analysisData?.confidence === 'number' ? `${analysisData.confidence * 100}%` : '94%' }}></div>
               </div>
+              <div className="flex items-center justify-between text-[11px] text-on-surface-variant pt-0.5">
+                <span>Cross-verified via satellite & civic feed</span>
+                <span className="font-medium text-secondary">Tamil: ஆபத்து நிலை: அதிகம்</span>
+              </div>
+            </div>
+
+            {/* Evidence Photo Thumbnail with Map Spatial Context */}
+            <div className="grid grid-cols-2 gap-space-xs">
+              <div className="relative rounded-xl overflow-hidden h-28 bg-surface-container">
+                <img
+                  src={analysisData?.imagePreview || analysisData?.imageUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuBIAiWY5fuzGUqkM4zWDnGcFHcQp7gM429CD66wWg7gGdF1vM6vYd2CLlEQTuBQk2uqED54Km05A_Q9EU_36Q9TCiQ0h0gWoGFEBLgZSdqpbTjCYJQVPwzawZ8ChVk5vehhuZNnaJd7FIxRFNs8paUqK2HPAIXB4rf2Vk4Y7Yc0hTNOU_7LhNSghm9BAVHPyHG3355NqlUVoxTz1dJUbhtFaLEObSkEAN6aVIUESk6Q"}
+                  alt="Hazard visual lens"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary font-label-sm text-label-sm">
+                  Road Commute Lens
+                </div>
+              </div>
+              <div
+                className="relative rounded-xl overflow-hidden h-28 bg-cover bg-center"
+                style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDSskZfOUzvCd7aSCJVQq9Q_mBXP38rn7t2KQna3fPWzRlF2SFzcejLgK8T4pAf3e8S5TpS6vfZ9SNHheZyXnt-ECW529sKkU7JJenM-ogofto9iesrAFHXy4mwaACFeiiqwmnz0fmttgT4eUu-jtJTjAzUu1N4Yo1zFFty9n2DHURB8rRYdITnotyYVNm5VyI28HifoSXYxAvjL2-skrZ8MFX0_Ug6tB9RpqtOwdJ')` }}
+              >
+                <div className="absolute inset-0 bg-primary/10"></div>
+                <div className="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md bg-primary/80 backdrop-blur-sm text-on-primary font-label-sm text-label-sm flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[13px]">pin_drop</span>
+                  Geo-tagged
+                </div>
+              </div>
             </div>
           </div>
 
@@ -258,16 +286,24 @@ export function AnalysisPage({
               <span className="font-label-sm text-label-sm text-on-surface-variant">{(analysisData?.evidenceFactors || []).length} Contributing Factors</span>
             </div>
             <div className="grid grid-cols-1 gap-space-xs">
-              {(analysisData?.evidenceFactors || []).map((factor, idx) => (
-                <div key={idx} className="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex items-start gap-space-sm">
-                  <div className="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0">
-                    <span className="material-symbols-outlined text-[20px]">report_problem</span>
+              {(analysisData?.evidenceFactors || []).map((factor, idx) => {
+                const lower = String(factor).toLowerCase();
+                const icon = lower.includes('school') ? 'school' : lower.includes('speed') || lower.includes('fast') ? 'speed' : lower.includes('zebra') || lower.includes('crossing') ? 'do_not_disturb_on' : lower.includes('light') || lower.includes('dark') ? 'light_off' : 'report_problem';
+                const isUrgent = lower.includes('speed') || lower.includes('fast') || lower.includes('danger');
+                return (
+                  <div key={idx} className="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex items-start gap-space-sm">
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${isUrgent ? 'bg-error-container text-on-error-container' : 'bg-surface-container-high text-primary'}`}>
+                      <span className="material-symbols-outlined text-[20px]">{icon}</span>
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-label-md text-label-md text-on-surface font-bold">{factor}</span>
+                      <span className="font-body-sm text-body-sm text-on-surface-variant">
+                        {lower.includes('school') ? 'Direct path connecting transit stop with secondary school campus.' : lower.includes('speed') ? 'Traffic exceeds school zone safety limits without dampeners.' : lower.includes('zebra') ? 'Absence of high-contrast roadway pavement indicators or reflectors.' : lower.includes('light') ? 'Diminished visibility during monsoon, rain, and early morning hours.' : 'Identified contributing environmental risk factor.'}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <span className="font-label-md text-label-md text-on-surface font-bold">{factor}</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -311,6 +347,12 @@ export function AnalysisPage({
                 <p className="font-body-md text-body-md text-surface-container-high leading-snug">
                   <strong className="text-on-primary">Avoid crossing alone.</strong> Use the traffic-warden assisted junction <span className="text-secondary-fixed-dim underline underline-offset-2">120m north</span> near Main Gate. Cross only in monitored cohorts. In an immediate danger or acute transit hazard, dial 112 for Police Rapid Response or 108 for Emergency Medical Assistance.
                 </p>
+              </div>
+              <div className="flex items-center justify-between text-on-primary-container font-label-sm text-label-sm pt-1">
+                <span>Ward Marshal On-Duty: Thiru. R. Murugan</span>
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]">call</span> Intercom #04
+                </span>
               </div>
             </div>
           </div>

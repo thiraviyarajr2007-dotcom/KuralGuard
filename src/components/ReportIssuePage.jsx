@@ -253,7 +253,7 @@ export function ReportIssuePage({
                 </span>
                 <div className="flex flex-col">
                   <span className="font-label-md text-label-md font-bold leading-tight">{cat.name}</span>
-                  <span className="text-[10px] leading-none">{cat.description}</span>
+                  <span className={`text-[10px] leading-none ${isSelected ? 'opacity-80 text-on-primary' : 'text-on-surface-variant'}`}>{cat.tamilName || cat.description}</span>
                 </div>
               </button>
             );
@@ -306,22 +306,29 @@ export function ReportIssuePage({
             </button>
           </div>
           {/* Inline mini-map GPS status confirmation */}
-          {gpsVerified && <div className="w-full bg-surface-container-low rounded-lg p-2.5 flex items-center justify-between border border-surface-container-high">
-            <div className="flex items-center gap-1.5 truncate">
-              <span className="material-symbols-outlined text-error text-[16px]">location_on</span>
-              <span className="font-label-sm text-label-sm text-on-surface font-semibold truncate">
-                {formData.location ? `${formData.location} • Verified` : 'Ward 14, Zone 5 • GPS Geocoded'}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={handleGpsLocate}
-              disabled={isLocating}
-              className="text-secondary font-label-sm text-label-sm font-bold flex-shrink-0 hover:underline"
+          {(gpsVerified || Boolean(formData.location)) && (
+            <div
+              className="w-full h-24 rounded-lg bg-cover bg-center relative overflow-hidden flex items-end p-2 mt-1"
+              style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDSskZfOUzvCd7aSCJVQq9Q_mBXP38rn7t2KQna3fPWzRlF2SFzcejLgK8T4pAf3e8S5TpS6vfZ9SNHheZyXnt-ECW529sKkU7JJenM-ogofto9iesrAFHXy4mwaACFeiiqwmnz0fmttgT4eUu-jtJTjAzUu1N4Yo1zFFty9n2DHURB8rRYdITnotyYVNm5VyI28HifoSXYxAvjL2-skrZ8MFX0_Ug6tB9RpqtOwdJ')` }}
             >
-              Update
-            </button>
-          </div>}
+              <div className="w-full bg-surface-container-lowest/90 backdrop-blur-md rounded-md px-2.5 py-1.5 flex items-center justify-between shadow-sm">
+                <div className="flex items-center gap-1.5 truncate">
+                  <span className="material-symbols-outlined text-error text-[16px]">location_on</span>
+                  <span className="font-label-sm text-label-sm text-on-surface font-semibold truncate">
+                    {formData.location ? `${formData.location} • Verified` : 'Ward 14, Zone 5 • Accurate to 4m'}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleGpsLocate}
+                  disabled={isLocating}
+                  className="text-secondary font-label-sm text-label-sm font-bold flex-shrink-0 hover:underline"
+                >
+                  Change
+                </button>
+              </div>
+            </div>
+          )}
           {errors.location && (
             <p id="report-location-error" role="alert" className="text-error text-xs font-semibold px-1">{errors.location}</p>
           )}

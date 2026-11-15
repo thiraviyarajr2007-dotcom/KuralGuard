@@ -327,6 +327,17 @@ No report was submitted to any authority.
           </div>
         </div>
 
+        {/* Map Snapshot Context */}
+        <div
+          className="w-full h-32 rounded-lg bg-cover bg-center relative overflow-hidden shadow-inner flex items-end p-2"
+          style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCDSskZfOUzvCd7aSCJVQq9Q_mBXP38rn7t2KQna3fPWzRlF2SFzcejLgK8T4pAf3e8S5TpS6vfZ9SNHheZyXnt-ECW529sKkU7JJenM-ogofto9iesrAFHXy4mwaACFeiiqwmnz0fmttgT4eUu-jtJTjAzUu1N4Yo1zFFty9n2DHURB8rRYdITnotyYVNm5VyI28HifoSXYxAvjL2-skrZ8MFX0_Ug6tB9RpqtOwdJ')` }}
+        >
+          <div className="bg-surface-container-lowest/90 backdrop-blur-sm px-2 py-1 rounded text-label-sm font-label-sm text-primary flex items-center gap-1 shadow-sm">
+            <span className="material-symbols-outlined text-[14px] text-error">location_on</span>
+            <span>{report?.location ? `${report.location} • Sector Watch` : 'Gandhi Road Traffic Sector • Ward 14'}</span>
+          </div>
+        </div>
+
         {/* Section 1: Summary & Observed Evidence */}
         <div className="flex flex-col gap-1.5 text-left">
           <div className="flex items-center gap-1.5 text-primary">
