@@ -4,7 +4,7 @@ import { t } from '../lang';
 
 export function LandingPage({ lang = 'en', onLangChange, onStartReport, onLoadDemo, onExploreDashboard, onGoToResources }) {
   return (
-    <div className="space-y-8 py-4 px-gutter-mobile">
+    <div className="space-y-8 px-gutter-mobile pb-4 pt-16">
       
       {/* Top Hero Identity Lockup Banner */}
       <div className="flex flex-col gap-space-sm">

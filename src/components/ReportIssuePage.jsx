@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { CATEGORIES } from '../data/mockData';
 import { t } from '../lang';
 import { useToast } from './Toast';
@@ -21,6 +21,11 @@ export function ReportIssuePage({
 }) {
   const { showToast } = useToast();
   const [errors, setErrors] = useState({});
+  const [isLocating, setIsLocating] = useState(false);
+  const [gpsVerified, setGpsVerified] = useState(false);
+  const categoryRef = useRef(null);
+  const locationRef = useRef(null);
+  const descriptionRef = useRef(null);
   const isValid = Boolean(
     formData.category &&
     formData.location.trim().length >= 3 &&
@@ -86,12 +91,32 @@ export function ReportIssuePage({
   };
 
   const handleGpsLocate = () => {
-    setFormData(prev => ({
-      ...prev,
-      location: "Near St. Anthony's Gate & Gandhi Road Junction, Ward 14"
-    }));
-    if (errors.location) setErrors(prev => ({ ...prev, location: null }));
-    showToast("GPS location verified: Ward 14, Zone 5 (Accurate to 4m)", "success");
+    if (!navigator.geolocation) {
+      showToast('Location is not available in this browser. Enter a nearby landmark instead.', 'error');
+      return;
+    }
+
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const location = `${coords.latitude.toFixed(5)}, ${coords.longitude.toFixed(5)}`;
+        setFormData(prev => ({ ...prev, location }));
+        setGpsVerified(true);
+        setIsLocating(false);
+        setErrors(prev => ({ ...prev, location: null }));
+        showToast('GPS coordinates added. Add a nearby landmark if you know one.', 'success');
+      },
+      (error) => {
+        setIsLocating(false);
+        const message = error.code === error.PERMISSION_DENIED
+          ? 'Location permission was denied. Enter a nearby landmark instead.'
+          : error.code === error.POSITION_UNAVAILABLE
+            ? 'Your location could not be found. Enter a nearby landmark instead.'
+            : 'Location request timed out. Try again or enter a nearby landmark.';
+        showToast(message, 'error');
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
   };
 
   const validateAndProceed = (e) => {
@@ -110,7 +135,13 @@ export function ReportIssuePage({
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      window.scrollTo({ top: 100, behavior: 'smooth' });
+      const firstInvalidField = !formData.category
+        ? categoryRef.current
+        : !formData.location || formData.location.trim().length < 3
+          ? locationRef.current
+          : descriptionRef.current;
+      firstInvalidField?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+      firstInvalidField?.focus?.();
       return;
     }
 
@@ -209,6 +240,8 @@ export function ReportIssuePage({
                 key={cat.id}
                 type="button"
                 onClick={() => handleCategorySelect(cat.id)}
+                ref={cat.id === CATEGORIES[0]?.id ? categoryRef : undefined}
+                aria-pressed={isSelected}
                 className={`category-chip flex-shrink-0 flex items-center gap-2 px-3.5 py-2.5 rounded-xl transition-all text-left ${
                   isSelected
                     ? 'bg-primary text-on-primary shadow-sm transform active:scale-95'
@@ -231,13 +264,13 @@ export function ReportIssuePage({
       {/* FIELD 2: Location */}
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <label className="font-label-lg text-label-lg text-primary flex items-center gap-1.5">
+          <label htmlFor="report-location" className="font-label-lg text-label-lg text-primary flex items-center gap-1.5">
             <span>2. Location</span>
             <span className="text-on-surface-variant font-normal font-label-sm text-label-sm">(இடம்)</span>
           </label>
-          <span className="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-            GPS Verified
+          <span className={`inline-flex items-center gap-1 font-label-sm text-label-sm font-bold ${gpsVerified ? 'text-secondary' : 'text-on-surface-variant'}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${gpsVerified ? 'bg-secondary' : 'bg-outline'}`}></span>
+            {gpsVerified ? 'GPS location added' : formData.location ? 'Location added' : 'Landmark or GPS'}
           </span>
         </div>
 
@@ -246,9 +279,16 @@ export function ReportIssuePage({
             <span className="material-symbols-outlined text-secondary text-[22px] flex-shrink-0">pin_drop</span>
             <input
               type="text"
+              id="report-location"
+              ref={locationRef}
+              aria-label="Location or nearby landmark"
+              aria-invalid={Boolean(errors.location)}
+              aria-describedby={errors.location ? 'report-location-error' : undefined}
+              maxLength={160}
               value={formData.location}
               onChange={(e) => {
                 setFormData(prev => ({ ...prev, location: e.target.value }));
+                setGpsVerified(false);
                 if (errors.location) setErrors(prev => ({ ...prev, location: null }));
               }}
               placeholder="Search cross-streets, college gate, landmark..."
@@ -257,15 +297,16 @@ export function ReportIssuePage({
             <button
               type="button"
               onClick={handleGpsLocate}
+              disabled={isLocating}
               aria-label="Auto detect location via GPS"
               title="GPS Auto-locate"
-              className="p-1 rounded-full bg-secondary-container text-on-secondary-fixed flex-shrink-0 hover:opacity-90 active:scale-95 transition-transform"
+              className="p-1 rounded-full bg-secondary-container text-on-secondary-fixed flex-shrink-0 hover:opacity-90 active:scale-95 transition-transform disabled:opacity-60"
             >
-              <span className="material-symbols-outlined text-[18px]">my_location</span>
+              <span className={`material-symbols-outlined text-[18px] ${isLocating ? 'animate-spin' : ''}`}>{isLocating ? 'progress_activity' : 'my_location'}</span>
             </button>
           </div>
           {/* Inline mini-map GPS status confirmation */}
-          <div className="w-full bg-surface-container-low rounded-lg p-2.5 flex items-center justify-between border border-surface-container-high">
+          {gpsVerified && <div className="w-full bg-surface-container-low rounded-lg p-2.5 flex items-center justify-between border border-surface-container-high">
             <div className="flex items-center gap-1.5 truncate">
               <span className="material-symbols-outlined text-error text-[16px]">location_on</span>
               <span className="font-label-sm text-label-sm text-on-surface font-semibold truncate">
@@ -275,13 +316,14 @@ export function ReportIssuePage({
             <button
               type="button"
               onClick={handleGpsLocate}
+              disabled={isLocating}
               className="text-secondary font-label-sm text-label-sm font-bold flex-shrink-0 hover:underline"
             >
               Update
             </button>
-          </div>
+          </div>}
           {errors.location && (
-            <p className="text-error text-xs font-semibold px-1">{errors.location}</p>
+            <p id="report-location-error" role="alert" className="text-error text-xs font-semibold px-1">{errors.location}</p>
           )}
           <p className="font-body-sm text-body-sm text-on-surface-variant px-1">
             Keep it specific so student commuters and ward responders can locate it safely without confusion.
@@ -292,16 +334,21 @@ export function ReportIssuePage({
       {/* FIELD 3: What did you observe? */}
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
-          <label className="font-label-lg text-label-lg text-primary flex items-center gap-1.5">
+          <label htmlFor="report-description" className="font-label-lg text-label-lg text-primary flex items-center gap-1.5">
             <span>3. What did you observe?</span>
             <span className="text-on-surface-variant font-normal font-label-sm text-label-sm">(விளக்கம்)</span>
           </label>
-          <span className="font-label-sm text-label-sm text-on-surface-variant">{formData.description.length} chars</span>
+          <span className="font-label-sm text-label-sm text-on-surface-variant">{formData.description.length}/1200</span>
         </div>
 
         <div className="bg-surface-container-lowest rounded-xl shadow-sm p-3.5 flex flex-col gap-2">
           <textarea
             rows={4}
+            id="report-description"
+            ref={descriptionRef}
+            aria-invalid={Boolean(errors.description)}
+            aria-describedby={errors.description ? 'report-description-error' : undefined}
+            maxLength={1200}
             value={formData.description}
             onChange={(e) => {
               setFormData(prev => ({ ...prev, description: e.target.value }));
@@ -311,7 +358,7 @@ export function ReportIssuePage({
             className="w-full bg-surface-container-low rounded-lg p-3 text-on-surface font-body-md text-body-md focus:outline-none focus:bg-surface-container-lowest placeholder:text-outline resize-none transition-colors"
           />
           {errors.description && (
-            <p className="text-error text-xs font-semibold">{errors.description}</p>
+            <p id="report-description-error" role="alert" className="text-error text-xs font-semibold">{errors.description}</p>
           )}
           <div className="flex items-center gap-1.5 flex-wrap pt-1">
             <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Suggested:</span>

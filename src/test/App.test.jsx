@@ -11,6 +11,9 @@ describe('KuralGuard Application Integration Tests', () => {
       clipboard: {
         writeText: vi.fn().mockImplementation(() => Promise.resolve()),
       },
+      geolocation: {
+        getCurrentPosition: vi.fn((onSuccess) => onSuccess({ coords: { latitude: 11.25, longitude: 78.3 } })),
+      },
     });
     window.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
     window.URL.revokeObjectURL = vi.fn();
@@ -206,7 +209,7 @@ describe('KuralGuard Application Integration Tests', () => {
     const gpsBtn = screen.getByRole('button', { name: /auto detect location via gps/i });
     fireEvent.click(gpsBtn);
     const locationInput = screen.getByPlaceholderText(/search cross-streets/i);
-    expect(locationInput.value).toContain('Gandhi Road');
+    expect(locationInput.value).toBe('11.25000, 78.30000');
 
     // Suggested Tag Append
     const missingSignageBtn = screen.getByRole('button', { name: /\+ Missing Signage/i });
