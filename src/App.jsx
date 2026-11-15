@@ -138,6 +138,18 @@ function MainApp() {
     saveReports(reports);
   }, [reports]);
 
+  useEffect(() => {
+    const syncRoute = () => {
+      const route = pageFromHash();
+      if (!route) return;
+      setActivePage(route);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('hashchange', syncRoute);
+    return () => window.removeEventListener('hashchange', syncRoute);
+  }, []);
+
   const navigateTo = (pageId) => {
     const next = validPage(pageId);
     setPageHistory((prev) => [...prev, next]);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import App from '../App';
 
@@ -238,5 +238,18 @@ describe('KuralGuard Application Integration Tests', () => {
     // Switch back to EN
     fireEvent.click(langBtn);
     expect(screen.getAllByText(/Home/i).length).toBeGreaterThan(0);
+  });
+
+  it('syncs the active screen when browser history changes the route hash', async () => {
+    render(<App />);
+
+    await act(async () => {
+      window.location.hash = '#/resources';
+      window.dispatchEvent(new Event('hashchange'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Safety & Emergency Resources')).toBeInTheDocument();
+    });
   });
 });

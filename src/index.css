@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #060B18;
-  color: #F8FAFC;
+  background-color: #f8f9ff;
+  color: #0b1c30;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Accessible focus outline */
 *:focus-visible {
-  outline: 2px solid #14B8A6;
+  outline: 2px solid #00677d;
   outline-offset: 2px;
 }
 
@@ -39,12 +39,12 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0B132B;
+  background: #eff4ff;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1C2541;
+  background: #c5c6cf;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2A365A;
+  background: #75777f;
 }
